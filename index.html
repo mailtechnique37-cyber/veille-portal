@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Veille — Portail</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f7f7f4; --bg-panel:#fff; --bg-soft:#f1efe8;
+  --text:#2c2c2a; --text-soft:#5f5e5a; --text-mute:#888780;
+  --border:rgba(44,44,42,0.12); --border-strong:rgba(44,44,42,0.2);
+  --accent:#185FA5; --accent-bg:#E6F1FB;
+  --radius:8px; --radius-lg:12px;
+  --font:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#1a1a18; --bg-panel:#242421; --bg-soft:#2c2c2a;
+    --text:#ececea; --text-soft:#b4b2a9; --text-mute:#888780;
+    --border:rgba(255,255,255,0.1); --border-strong:rgba(255,255,255,0.18);
+    --accent:#7FB6F0; --accent-bg:rgba(127,182,240,0.15);
+  }
+}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;overflow:hidden}
+
+#app{display:flex;flex-direction:column;height:100vh;position:relative}
+
+/* TOPBAR */
+#topbar{height:46px;background:var(--bg-panel);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0;z-index:20}
+#logo{font-size:14px;font-weight:500;letter-spacing:-.3px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+#logo em{font-style:normal;font-size:10px;background:var(--accent-bg);color:var(--accent);padding:2px 6px;border-radius:3px;font-weight:500}
+#backend-status{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--bg-soft);color:var(--text-mute);display:flex;align-items:center;gap:4px}
+#backend-status .dot{width:6px;height:6px;border-radius:50%;background:#888}
+#backend-status.ok .dot{background:#2aa876}
+#backend-status.err .dot{background:#d43b3b}
+#searchbox{position:relative;flex:1;max-width:280px}
+#searchbox input{width:100%;padding:6px 8px 6px 28px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-soft);color:var(--text);font-family:inherit}
+#searchbox input:focus{outline:none;border-color:var(--accent)}
+#searchbox svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:12px;height:12px;stroke:var(--text-mute);fill:none;stroke-width:2;pointer-events:none}
+#view-toggle{display:flex;gap:2px;background:var(--bg-soft);border-radius:var(--radius);padding:2px}
+.vtbtn{padding:4px 9px;font-size:11px;border:none;border-radius:5px;background:transparent;color:var(--text-mute);cursor:pointer;font-family:inherit}
+.vtbtn.on{background:var(--bg-panel);color:var(--text);border:1px solid var(--border)}
+.tbtn{padding:5px 10px;font-size:11px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-panel);color:var(--text-soft);cursor:pointer;white-space:nowrap;font-family:inherit}
+.tbtn:hover{background:var(--bg-soft);color:var(--text)}
+
+/* TABBAR */
+#tabbar{background:var(--bg-panel);border-bottom:1px solid var(--border);display:flex;align-items:flex-end;padding:0 10px;gap:1px;overflow-x:auto;flex-shrink:0;z-index:19;scrollbar-width:thin}
+.tab{display:flex;align-items:center;gap:6px;padding:8px 12px;font-size:12px;border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;color:var(--text-soft);white-space:nowrap;user-select:none;position:relative}
+.tab:hover{background:var(--bg-soft)}
+.tab.active{background:var(--bg);border-color:var(--border);color:var(--text);font-weight:500;bottom:-1px}
+.tab.drag-over{background:var(--accent-bg)}
+.tab-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tab-unread{font-size:10px;background:var(--accent-bg);color:var(--accent);padding:1px 5px;border-radius:3px;font-weight:500}
+.tab-menu-btn{opacity:0;font-size:11px;color:var(--text-mute);margin-left:2px;transition:opacity .15s}
+.tab:hover .tab-menu-btn{opacity:1}
+.tab-add{padding:6px 10px;font-size:14px;color:var(--text-mute);cursor:pointer;border-radius:6px 6px 0 0;border:none;background:transparent;font-family:inherit}
+.tab-add:hover{background:var(--bg-soft);color:var(--text)}
+
+/* LAYOUT TOOLBAR */
+#layout-bar{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:5px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+#layout-bar span.lbl{font-size:10px;color:var(--text-mute);text-transform:uppercase;letter-spacing:.5px}
+.lcbtn{padding:3px 8px;font-size:11px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-panel);color:var(--text-soft);cursor:pointer;font-family:inherit}
+.lcbtn:hover,.lcbtn.active{color:var(--text);border-color:var(--border-strong)}
+#filter-pills{display:flex;gap:4px}
+.fpill{padding:3px 9px;font-size:11px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-soft);cursor:pointer;font-family:inherit}
+.fpill.on{background:var(--bg-panel);color:var(--text);border-color:var(--border-strong)}
+#sync-status{margin-left:auto;font-size:10px;color:var(--text-mute);display:flex;align-items:center;gap:4px}
+
+/* CANVAS */
+#canvas{flex:1;overflow-y:auto;padding:12px;position:relative}
+.col-layout{display:grid;gap:10px}
+.col-layout[data-cols="1"]{grid-template-columns:1fr}
+.col-layout[data-cols="2"]{grid-template-columns:1fr 1fr}
+.col-layout[data-cols="3"]{grid-template-columns:1fr 1fr 1fr}
+.col-layout[data-cols="4"]{grid-template-columns:1fr 1fr 1fr 1fr}
+.col-layout[data-cols="2L"]{grid-template-columns:2fr 1fr}
+.col-layout[data-cols="2R"]{grid-template-columns:1fr 2fr}
+@media (max-width:700px){
+  .col-layout{grid-template-columns:1fr!important}
+}
+.column{display:flex;flex-direction:column;gap:8px;min-height:200px;padding:4px;border-radius:var(--radius-lg);border:2px dashed transparent;transition:all .15s}
+.column.drop-target{border-color:var(--accent);background:var(--accent-bg)}
+.empty-col-msg{padding:22px;text-align:center;font-size:11px;color:var(--text-mute);border:2px dashed var(--border);border-radius:var(--radius-lg)}
+
+/* WIDGET */
+.widget{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.widget.dragging{opacity:.4}
+.wh{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;cursor:grab;user-select:none;flex-shrink:0}
+.wh:active{cursor:grabbing}
+.wicon{width:18px;height:18px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.wtitle{font-size:12px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wmeta{font-size:10px;color:var(--text-mute);flex-shrink:0}
+.wacts{display:flex;gap:1px;flex-shrink:0}
+.wb{width:22px;height:22px;border:none;background:transparent;color:var(--text-mute);cursor:pointer;border-radius:3px;font-size:11px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.wb:hover{background:var(--bg-soft);color:var(--text)}
+.wbody{max-height:500px;overflow-y:auto}
+.widget.collapsed .wbody{display:none}
+.widget.loading .wbody{opacity:.5}
+
+/* FEED ITEMS */
+.fi{padding:9px 12px;border-bottom:1px solid var(--border);cursor:pointer;display:block;color:inherit;text-decoration:none}
+.fi:last-child{border-bottom:none}
+.fi:hover{background:var(--bg-soft)}
+.fi-src{font-size:9px;color:var(--text-mute);margin-bottom:3px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.fi-t{font-size:12px;line-height:1.4;color:var(--text)}
+.fi.unread .fi-t{font-weight:500}
+.fi-time{font-size:9px;color:var(--text-mute);margin-top:3px}
+.badge{font-size:9px;padding:1px 5px;border-radius:2px;font-weight:500}
+
+/* STATS */
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.sw-cell{background:var(--bg-panel);padding:10px 12px}
+.sw-n{font-size:18px;font-weight:500}
+.sw-l{font-size:9px;color:var(--text-mute);margin-top:1px}
+
+/* MOSAIC */
+.mosaic-layout{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.mosaic-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:10px;cursor:pointer;color:inherit;text-decoration:none;display:block}
+.mosaic-card:hover{background:var(--bg-soft)}
+.mc-src{font-size:9px;color:var(--text-mute);margin-bottom:4px}
+.mc-t{font-size:11px;line-height:1.35;font-weight:500}
+
+/* READER VIEW */
+.reader-list{max-width:700px;margin:0 auto;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+
+/* ARTICLE READER (overlay) */
+#reader{display:none;position:absolute;inset:0;z-index:50;background:var(--bg-panel);flex-direction:column}
+#reader.on{display:flex}
+#rbar{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+#rbody{flex:1;overflow-y:auto;padding:24px;max-width:700px;margin:0 auto;width:100%}
+#rtitle{font-size:18px;font-weight:500;line-height:1.35;margin-bottom:10px}
+#rmeta{font-size:11px;color:var(--text-soft);margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap}
+#rcontent{font-size:13px;line-height:1.75;color:var(--text-soft)}
+#rcontent p{margin-bottom:1em}
+#raction{display:flex;gap:6px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);flex-wrap:wrap}
+
+/* MODAL OVERLAY */
+#ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.35);z-index:60;align-items:center;justify-content:center;padding:20px}
+#ov.on{display:flex}
+.modal{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;width:380px;max-width:100%;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:14px;font-weight:500;margin-bottom:12px}
+.mrow{margin-top:10px}
+.mrow label{font-size:11px;color:var(--text-soft);display:block;margin-bottom:3px}
+.mrow input,.mrow select,.mrow textarea{width:100%;padding:6px 9px;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-soft);color:var(--text);font-family:inherit}
+.mrow textarea{min-height:70px;resize:vertical;font-family:var(--font)}
+.mfooter{display:flex;justify-content:flex-end;gap:6px;margin-top:16px;flex-wrap:wrap}
+.btn-g{padding:6px 12px;font-size:11px;border:1px solid var(--border);border-radius:var(--radius);background:transparent;color:var(--text-soft);cursor:pointer;font-family:inherit}
+.btn-g:hover{background:var(--bg-soft)}
+.btn-p{padding:6px 14px;font-size:11px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;cursor:pointer;font-weight:500;font-family:inherit}
+.btn-p:hover{opacity:.9}
+
+/* TOAST */
+#toast{position:absolute;bottom:18px;right:18px;background:#2C2C2A;color:#F1EFE8;font-size:11px;padding:7px 14px;border-radius:var(--radius);opacity:0;transition:opacity .25s;pointer-events:none;z-index:999}
+#toast.on{opacity:1}
+
+/* CONTEXT MENU */
+#ctx{display:none;position:absolute;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);z-index:200;min-width:170px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.ctx-item{padding:8px 14px;font-size:12px;cursor:pointer;color:var(--text)}
+.ctx-item:hover{background:var(--bg-soft)}
+.ctx-sep{height:1px;background:var(--border);margin:2px 0}
+.ctx-item.danger{color:#c94747}
+
+/* SETUP PROMPT */
+#setup{display:none;position:absolute;inset:0;background:var(--bg);z-index:300;align-items:center;justify-content:center;padding:20px}
+#setup.on{display:flex}
+.setup-card{background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;max-width:460px;width:100%}
+.setup-card h2{font-size:18px;font-weight:500;margin-bottom:8px}
+.setup-card p{font-size:13px;color:var(--text-soft);line-height:1.6;margin-bottom:14px}
+
+/* spinner */
+.spinner{width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* === MODE PUBLIC (lecture seule) === */
+body.public-mode .public-hide{display:none!important}
+body.public-mode .tab-menu-btn{display:none!important}
+body.public-mode .tab-add{display:none!important}
+body.public-mode .wh{cursor:default!important}
+body.public-mode .wb[title*="Actualiser"]{display:flex}
+body.public-mode .wb[title*="Options"]{display:none!important}
+body.public-mode .wb[title*="Déplier"],body.public-mode .wb[title*="Replier"]{display:flex}
+body.public-mode .column{border:none!important}
+body.public-mode .empty-col-msg{display:none!important}
+body.public-mode #sync-status{display:none!important}
+body.public-mode #public-banner{display:flex!important}
+body.public-mode #filter-pills .fpill[data-f="saved"],body.public-mode #filter-pills .fpill[data-f="alert"]{display:none!important}
+
+#public-banner{display:none;font-size:10px;color:var(--text-mute);align-items:center;gap:5px;padding:2px 8px;background:var(--bg-soft);border-radius:20px}
+#public-banner .dot{width:6px;height:6px;border-radius:50%;background:#2aa876}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- SETUP SCREEN (si backend non configuré) -->
+  <div id="setup">
+    <div class="setup-card">
+      <h2>Configuration du backend</h2>
+      <p>Pour lire des flux RSS réels, le portail a besoin de l'URL de ton backend Render.</p>
+      <div class="mrow">
+        <label>URL du backend (sans slash final)</label>
+        <input id="setup-url" placeholder="https://veille-backend-xxxx.onrender.com" type="text">
+      </div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.skipSetup()">Passer (mode démo offline)</button>
+        <button class="btn-p" onclick="S.saveBackend()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div id="logo">Veille <em>v2</em></div>
+    <div id="backend-status" title="État du backend"><span class="dot"></span><span id="bs-label">Vérification…</span></div>
+    <div id="searchbox">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="sq" placeholder="Rechercher…" oninput="S.search(this.value)">
+    </div>
+    <div id="view-toggle">
+      <button class="vtbtn on" id="vt-widget" onclick="S.setView('widget')">Widgets</button>
+      <button class="vtbtn" id="vt-reader" onclick="S.setView('reader-list')">Lecteur</button>
+      <button class="vtbtn" id="vt-mosaic" onclick="S.setView('mosaic')">Mosaïque</button>
+    </div>
+    <button class="tbtn" onclick="S.refreshAll()" title="Rafraîchir tous les flux">↻</button>
+    <button class="tbtn public-hide" onclick="S.openAddWidget()">+ Flux</button>
+    <button class="tbtn public-hide" onclick="S.openSettings()">⚙</button>
+    <div id="public-banner" title="Mode lecture seule"><span class="dot"></span>Lecture seule</div>
+  </div>
+
+  <!-- TABBAR -->
+  <div id="tabbar"></div>
+
+  <!-- LAYOUT BAR -->
+  <div id="layout-bar">
+    <span class="lbl">Colonnes</span>
+    <button class="lcbtn" data-lc="1" onclick="S.setLayout('1')">1</button>
+    <button class="lcbtn" data-lc="2" onclick="S.setLayout('2')">2</button>
+    <button class="lcbtn" data-lc="3" onclick="S.setLayout('3')">3</button>
+    <button class="lcbtn" data-lc="4" onclick="S.setLayout('4')">4</button>
+    <button class="lcbtn" data-lc="2L" onclick="S.setLayout('2L')">2L</button>
+    <button class="lcbtn" data-lc="2R" onclick="S.setLayout('2R')">2R</button>
+    <div style="width:1px;height:14px;background:var(--border);margin:0 4px"></div>
+    <span class="lbl">Filtrer</span>
+    <div id="filter-pills">
+      <button class="fpill on" data-f="all" onclick="S.setFilter('all')">Tout</button>
+      <button class="fpill" data-f="unread" onclick="S.setFilter('unread')">Non lus</button>
+      <button class="fpill" data-f="saved" onclick="S.setFilter('saved')">Épinglés</button>
+      <button class="fpill" data-f="alert" onclick="S.setFilter('alert')">Alertes</button>
+    </div>
+    <div id="sync-status"><span id="sync-text">●</span></div>
+  </div>
+
+  <!-- CANVAS -->
+  <div id="canvas"></div>
+
+  <!-- ARTICLE READER -->
+  <div id="reader">
+    <div id="rbar">
+      <button class="btn-g" onclick="S.closeReader()">← Retour</button>
+      <span id="rsrc" style="font-size:11px;color:var(--text-soft)"></span>
+      <div style="flex:1"></div>
+      <button class="btn-g public-hide" id="pin-btn" onclick="S.pinCurrentArticle()">Épingler</button>
+    </div>
+    <div id="rbody">
+      <div id="rtitle"></div>
+      <div id="rmeta"></div>
+      <div id="rcontent"></div>
+      <div id="raction"></div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="ov"><div class="modal" id="modal-body"></div></div>
+  <div id="ctx"></div>
+  <div id="toast"></div>
+</div>
+
+<script>
+// ========================================================================
+//  VEILLE PORTAL — FRONT-END
+//  Consomme le backend Render pour les flux RSS + la persistance
+// ========================================================================
+
+const LS_BACKEND = 'veille_backend_url';
+const LS_STATE = 'veille_state_v2';
+
+// --- Détection du mode public (lecture seule) ---
+// Active si l'URL contient ?view=public
+const IS_PUBLIC = new URLSearchParams(window.location.search).get('view') === 'public';
+
+// En mode public : URL du backend "hardcodée" ici après ton premier déploiement
+// Remplace cette chaîne par ton URL Render une fois que tout est configuré
+const PUBLIC_BACKEND_URL = 'https://veille-backend-160e.onrender.com';
+const COLORS = {rss:'#185FA5',social:'#0F6E56',email:'#854F0B',youtube:'#A32D2D',generic:'#5F5E5A'};
+const BGS = {rss:'#E6F1FB',social:'#E1F5EE',email:'#FAEEDA',youtube:'#FCEBEB',generic:'#F1EFE8'};
+const ICONS = {rss:'◈',social:'◉',email:'✉',youtube:'▶',stats:'◫'};
+
+function mkId(){return 'id'+Date.now()+Math.random().toString(36).slice(2,6)}
+
+// --- Flux RSS de démo pré-chargés -------------------------------------
+const DEMO_FEEDS = [
+  {title:'Le Monde — Une',      url:'https://www.lemonde.fr/rss/une.xml',             tab:'t1'},
+  {title:'Le Monde — Tech',     url:'https://www.lemonde.fr/pixels/rss_full.xml',     tab:'t1'},
+  {title:'Hacker News',         url:'https://hnrss.org/frontpage',                    tab:'t1'},
+  {title:'Next — Tech',         url:'https://next.ink/feed/',                         tab:'t1'},
+  {title:'France Info',         url:'https://www.francetvinfo.fr/titres.rss',         tab:'t2'},
+  {title:'Radio France',        url:'https://www.radiofrance.fr/rss',                 tab:'t2'},
+  {title:'Les Échos',           url:'https://services.lesechos.fr/rss/les-echos-economie-france.xml', tab:'t3'},
+  {title:'Numerama',            url:'https://www.numerama.com/feed/',                 tab:'t1'},
+];
+
+const DEFAULT_STATE = {
+  tabs: [
+    {id:'t1', label:'Tech & IA',  color:'#185FA5'},
+    {id:'t2', label:'Actualités',  color:'#0F6E56'},
+    {id:'t3', label:'Économie',    color:'#854F0B'},
+    {id:'t4', label:'Veille perso',color:'#534AB7'},
+  ],
+  activeTab:'t1', filter:'all', view:'widget', searchQ:'',
+  saved:[], readIds:[], keywords:['IA','LLM','open source'],
+  layouts:{t1:'3',t2:'2',t3:'2',t4:'2'},
+  columns:{
+    t1:[{id:mkId(),widgets:[]},{id:mkId(),widgets:[]},{id:mkId(),widgets:[]}],
+    t2:[{id:mkId(),widgets:[]},{id:mkId(),widgets:[]}],
+    t3:[{id:mkId(),widgets:[]},{id:mkId(),widgets:[]}],
+    t4:[{id:mkId(),widgets:[]},{id:mkId(),widgets:[]}],
+  },
+  widgets:{}, stats:{id:'stats_widget',type:'stats',title:'Tableau de bord',source:'generic',collapsed:false}
+};
+
+// ========================================================================
+//  STATE MANAGER
+// ========================================================================
+const S = {
+  state:null, backendUrl:null, dragWidget:null, dragFromCol:null, dragFromTab:null,
+  curArt:null, toastTimer:null, feedData:{}, loading:new Set(),
+
+  // --- init -----------------------------------------------------------
+  async init(){
+    if (IS_PUBLIC) {
+      // Mode public : URL du backend fixe, config uniquement depuis le backend
+      this.backendUrl = PUBLIC_BACKEND_URL;
+      document.body.classList.add('public-mode');
+      await this.startAppPublic();
+      return;
+    }
+    this.backendUrl = localStorage.getItem(LS_BACKEND);
+    if (!this.backendUrl) { this.showSetup(); }
+    else { this.startApp(); }
+  },
+
+  // Mode public : charge uniquement la config partagée depuis le backend,
+  // n'écrit jamais en localStorage, désactive toute édition
+  async startAppPublic(){
+    // état par défaut (sera écrasé par la config backend)
+    this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    this.state.readIds = [];
+    this.state.saved = [];
+    this.render();
+    await this.checkBackend();
+    try {
+      const r = await fetch(this.backendUrl + '/api/state');
+      if (r.ok) {
+        const data = await r.json();
+        if (data && data.state) {
+          this.state = data.state;
+          // reset les préfs perso du propriétaire (ne pas afficher ses épingles)
+          this.state.saved = [];
+          this.state.readIds = [];
+          this.state.filter = 'all';
+          this.state.searchQ = '';
+        }
+      }
+    } catch(e) { /* garde le default */ }
+    this.render();
+    this.refreshAll();
+    // Rafraîchit la config partagée toutes les 5 min
+    setInterval(async () => {
+      try {
+        const r = await fetch(this.backendUrl + '/api/state');
+        if (r.ok) {
+          const data = await r.json();
+          if (data && data.state) {
+            const currentTab = this.state.activeTab;
+            this.state = data.state;
+            this.state.saved = [];
+            this.state.readIds = [];
+            // conserver l'onglet actif du visiteur s'il existe toujours
+            if (this.state.tabs.some(t => t.id === currentTab)) this.state.activeTab = currentTab;
+            this.render();
+            this.refreshAll();
+          }
+        }
+      } catch(e) {}
+    }, 5 * 60 * 1000);
+  },
+
+  showSetup(){
+    document.getElementById('setup').classList.add('on');
+  },
+
+  skipSetup(){
+    this.backendUrl = null;
+    document.getElementById('setup').classList.remove('on');
+    this.startApp();
+  },
+
+  saveBackend(){
+    let url = document.getElementById('setup-url').value.trim();
+    if (!url) return;
+    if (url.endsWith('/')) url = url.slice(0,-1);
+    localStorage.setItem(LS_BACKEND, url);
+    this.backendUrl = url;
+    document.getElementById('setup').classList.remove('on');
+    this.startApp();
+  },
+
+  async startApp(){
+    this.loadState();
+    this.render();
+    if (this.backendUrl) {
+      await this.checkBackend();
+      this.preloadDemoFeeds();
+      this.refreshAll();
+    } else {
+      this.setBackendStatus('off', 'Mode démo offline');
+    }
+  },
+
+  // --- state persistance ---------------------------------------------
+  loadState(){
+    try {
+      const raw = localStorage.getItem(LS_STATE);
+      this.state = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULT_STATE));
+    } catch(e) {
+      this.state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+    // garantie de structure
+    if (!this.state.readIds) this.state.readIds = [];
+    if (!this.state.saved) this.state.saved = [];
+    if (!this.state.keywords) this.state.keywords = [];
+    if (!this.state.feedData) this.state.feedData = {};
+  },
+
+  saveState(){
+    if (IS_PUBLIC) return; // pas de sauvegarde en mode public
+    try {
+      localStorage.setItem(LS_STATE, JSON.stringify(this.state));
+      this.setSync('saved');
+    } catch(e) {
+      this.setSync('error');
+    }
+    if (this.backendUrl) this.syncToBackend();
+  },
+
+  async syncToBackend(){
+    try {
+      await fetch(this.backendUrl + '/api/state', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(this.state)
+      });
+    } catch(e) { /* fail silencieux */ }
+  },
+
+  setSync(mode){
+    const el = document.getElementById('sync-text');
+    if (!el) return;
+    if (mode==='saved') { el.textContent='● Sauvegardé'; el.style.color='#2aa876'; }
+    else if (mode==='syncing') { el.textContent='⟳ Sync…'; el.style.color='#888'; }
+    else if (mode==='error') { el.textContent='⚠ Erreur'; el.style.color='#d43b3b'; }
+  },
+
+  // --- backend health ------------------------------------------------
+  async checkBackend(){
+    if (!this.backendUrl) return false;
+    this.setBackendStatus('checking','Vérification…');
+    try {
+      const r = await fetch(this.backendUrl + '/api/health');
+      if (r.ok) { this.setBackendStatus('ok','Backend OK'); return true; }
+      this.setBackendStatus('err','Backend HS');
+    } catch(e) {
+      this.setBackendStatus('err','Backend injoignable');
+    }
+    return false;
+  },
+
+  setBackendStatus(mode, label){
+    const el = document.getElementById('backend-status');
+    const lbl = document.getElementById('bs-label');
+    if (!el || !lbl) return;
+    el.classList.remove('ok','err');
+    if (mode==='ok') el.classList.add('ok');
+    else if (mode==='err') el.classList.add('err');
+    lbl.textContent = label;
+  },
+
+  // --- demo feeds pré-chargement -------------------------------------
+  preloadDemoFeeds(){
+    // N'ajoute les flux de démo que si l'utilisateur n'a encore rien configuré
+    const hasWidgets = Object.keys(this.state.widgets).length > 0;
+    if (hasWidgets) return;
+    DEMO_FEEDS.forEach(f => {
+      const id = mkId();
+      this.state.widgets[id] = {
+        id, type:'rss', title:f.title, source:'rss', collapsed:false, url:f.url, items:[]
+      };
+      const cols = this.state.columns[f.tab] || this.state.columns[this.state.activeTab];
+      // répartit sur les colonnes successivement
+      const colIdx = Object.values(this.state.widgets).length % cols.length;
+      cols[colIdx].widgets.push(id);
+    });
+    this.saveState();
+    this.render();
+  },
+
+  // --- RSS fetching ---------------------------------------------------
+  async fetchFeed(widgetId){
+    const w = this.state.widgets[widgetId];
+    if (!w || !w.url || !this.backendUrl) return;
+    this.loading.add(widgetId);
+    this.updateWidget(widgetId);
+    try {
+      const url = this.backendUrl + '/api/rss?url=' + encodeURIComponent(w.url);
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('status ' + r.status);
+      const data = await r.json();
+      w.items = (data.items || []).map(it => ({
+        id: it.id || it.link || mkId(),
+        title: it.title || '(sans titre)',
+        link: it.link || '',
+        time: this.formatTime(it.pubDate),
+        pubDate: it.pubDate,
+        summary: it.summary || '',
+        src: data.title || w.title,
+        unread: !this.state.readIds.includes(it.id || it.link),
+        alert: this.isAlert(it.title + ' ' + (it.summary||''))
+      }));
+    } catch(e) {
+      w.items = [{id:mkId(),title:'Erreur de chargement : '+e.message,time:'',src:w.title,unread:false,alert:false,error:true}];
+    }
+    this.loading.delete(widgetId);
+    this.updateWidget(widgetId);
+    this.saveState();
+  },
+
+  async refreshAll(){
+    const widgets = Object.values(this.state.widgets).filter(w => w.type==='rss' && w.url);
+    if (!widgets.length || !this.backendUrl) return;
+    this.toast('Rafraîchissement de ' + widgets.length + ' flux…');
+    await Promise.all(widgets.map(w => this.fetchFeed(w.id)));
+    this.renderTabs();
+    this.toast('Flux mis à jour ✓');
+  },
+
+  isAlert(text){
+    if (!text) return false;
+    const t = text.toLowerCase();
+    return this.state.keywords.some(k => t.includes(k.toLowerCase()));
+  },
+
+  formatTime(dateStr){
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return 'à l\'instant';
+    if (diff < 3600) return Math.floor(diff/60) + ' min';
+    if (diff < 86400) return Math.floor(diff/3600) + ' h';
+    if (diff < 604800) return Math.floor(diff/86400) + ' j';
+    return d.toLocaleDateString('fr-FR');
+  },
+
+  // --- rendering -----------------------------------------------------
+  render(){
+    this.renderTabs();
+    this.renderLayoutBar();
+    this.renderCanvas();
+  },
+
+  renderTabs(){
+    const bar = document.getElementById('tabbar');
+    const unreadByTab = {};
+    this.state.tabs.forEach(t => {
+      const cols = this.state.columns[t.id] || [];
+      let n = 0;
+      cols.forEach(c => c.widgets.forEach(wid => {
+        const w = this.state.widgets[wid];
+        if (w && w.items) n += w.items.filter(i => i.unread).length;
+      }));
+      unreadByTab[t.id] = n;
+    });
+    bar.innerHTML = this.state.tabs.map(t => `
+      <div class="tab${t.id===this.state.activeTab?' active':''}" data-tid="${t.id}"
+        onclick="S.switchTab('${t.id}')"
+        ondragover="S.tabDragOver(event,'${t.id}')"
+        ondragleave="S.tabDragLeave('${t.id}')"
+        ondrop="S.tabDrop(event,'${t.id}')">
+        <div class="tab-pip" style="background:${t.color}"></div>
+        ${this.escape(t.label)}
+        ${unreadByTab[t.id] ? `<span class="tab-unread">${unreadByTab[t.id]}</span>` : ''}
+        <span class="tab-menu-btn" onclick="event.stopPropagation();S.openTabMenu('${t.id}',event)">▾</span>
+      </div>`).join('') + `<button class="tab-add" onclick="S.openAddTab()" title="Nouvel onglet">+</button>`;
+  },
+
+  renderLayoutBar(){
+    const lc = this.state.layouts[this.state.activeTab] || '3';
+    document.querySelectorAll('.lcbtn').forEach(b => b.classList.toggle('active', b.dataset.lc===lc));
+    document.querySelectorAll('.fpill').forEach(b => b.classList.toggle('on', b.dataset.f===this.state.filter));
+    ['widget','reader-list','mosaic'].forEach(v => {
+      const el = document.getElementById('vt-'+v);
+      if (el) el.classList.toggle('on', this.state.view===v);
+    });
+  },
+
+  renderCanvas(){
+    const canvas = document.getElementById('canvas');
+    const tab = this.state.activeTab;
+    const layout = this.state.layouts[tab] || '3';
+    const numCols = parseInt(layout) || 3;
+    if (!this.state.columns[tab]) this.state.columns[tab] = [];
+    const cols = this.state.columns[tab];
+    while (cols.length < numCols) cols.push({id:mkId(),widgets:[]});
+    if (cols.length > numCols) {
+      const extra = cols.splice(numCols);
+      extra.forEach(c => c.widgets.forEach(wid => cols[0].widgets.push(wid)));
+    }
+
+    if (this.state.view === 'mosaic') return this.renderMosaic(canvas);
+    if (this.state.view === 'reader-list') return this.renderReaderList(canvas);
+
+    canvas.innerHTML = `<div class="col-layout" data-cols="${layout}" id="col-layout"></div>`;
+    const cl = document.getElementById('col-layout');
+    cols.forEach((col, ci) => {
+      const div = document.createElement('div');
+      div.className = 'column';
+      div.dataset.colid = col.id;
+      div.ondragover = (e) => { e.preventDefault(); div.classList.add('drop-target'); };
+      div.ondragleave = () => div.classList.remove('drop-target');
+      div.ondrop = (e) => { e.preventDefault(); div.classList.remove('drop-target'); this.dropOnCol(col.id); };
+      let wids = col.widgets.slice();
+      if (this.state.searchQ) {
+        wids = wids.filter(wid => {
+          const w = this.state.widgets[wid];
+          if (!w) return false;
+          if (w.title.toLowerCase().includes(this.state.searchQ)) return true;
+          return (w.items||[]).some(i => (i.title||'').toLowerCase().includes(this.state.searchQ));
+        });
+      }
+      if (wids.length === 0) {
+        div.innerHTML = `<div class="empty-col-msg">Glissez un widget ici</div>`;
+      } else {
+        wids.forEach(wid => {
+          const w = this.state.widgets[wid];
+          if (w) div.appendChild(this.buildWidget(w, col.id));
+        });
+      }
+      // widget stats dans la première colonne seulement si on est sur le premier onglet
+      if (ci === cols.length - 1 && this.state.activeTab === this.state.tabs[0].id && !this.state.searchQ) {
+        div.appendChild(this.buildStatsWidget());
+      }
+      cl.appendChild(div);
+    });
+  },
+
+  renderMosaic(canvas){
+    const tab = this.state.activeTab;
+    const cols = this.state.columns[tab] || [];
+    let all = [];
+    cols.forEach(c => c.widgets.forEach(wid => {
+      const w = this.state.widgets[wid];
+      if (w && w.items) w.items.forEach(i => all.push({...i, wt: w.title}));
+    }));
+    all = this.applyFilter(all);
+    canvas.innerHTML = `<div class="mosaic-layout">${all.map(i => `
+      <a class="mosaic-card" href="${this.escape(i.link||'#')}" target="_blank" rel="noopener" onclick="S.markRead('${i.id}');return true">
+        <div class="mc-src">${this.escape(i.src||i.wt||'')} · ${i.time||''}</div>
+        <div class="mc-t">${this.escape(i.title||'')}</div>
+      </a>`).join('') || '<div style="padding:30px;text-align:center;color:var(--text-mute);font-size:12px">Aucun article</div>'}</div>`;
+  },
+
+  renderReaderList(canvas){
+    const tab = this.state.activeTab;
+    const cols = this.state.columns[tab] || [];
+    let all = [];
+    cols.forEach(c => c.widgets.forEach(wid => {
+      const w = this.state.widgets[wid];
+      if (w && w.items) w.items.forEach(i => all.push({...i, wt: w.title}));
+    }));
+    all = this.applyFilter(all).sort((a,b) => (new Date(b.pubDate||0)) - (new Date(a.pubDate||0)));
+    canvas.innerHTML = `<div class="reader-list">${all.map(i => `
+      <div class="fi${i.unread?' unread':''}" onclick="S.openArticle('${i.id}')">
+        <div class="fi-src">${this.escape(i.src||i.wt||'')} ${i.alert?'<span class="badge" style="background:#FCEBEB;color:#A32D2D">alerte</span>':''} ${this.state.saved.includes(i.id)?'<span class="badge" style="background:#FAEEDA;color:#854F0B">épinglé</span>':''}</div>
+        <div class="fi-t">${this.escape(i.title||'')}</div>
+        <div class="fi-time">${i.time||''}</div>
+      </div>`).join('') || '<div style="padding:40px;text-align:center;color:var(--text-mute);font-size:12px">Aucun article</div>'}</div>`;
+  },
+
+  applyFilter(items){
+    let r = items;
+    if (this.state.filter==='unread') r = r.filter(i => i.unread);
+    if (this.state.filter==='saved') r = r.filter(i => this.state.saved.includes(i.id));
+    if (this.state.filter==='alert') r = r.filter(i => i.alert);
+    if (this.state.searchQ) r = r.filter(i => (i.title||'').toLowerCase().includes(this.state.searchQ));
+    return r;
+  },
+
+  buildWidget(w, colId){
+    const div = document.createElement('div');
+    div.className = 'widget' + (w.collapsed?' collapsed':'') + (this.loading.has(w.id)?' loading':'');
+    div.dataset.wid = w.id;
+    if (!IS_PUBLIC) {
+      div.draggable = true;
+      div.ondragstart = (e) => {
+        this.dragWidget = w.id;
+        this.dragFromCol = colId;
+        this.dragFromTab = this.state.activeTab;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => div.classList.add('dragging'), 0);
+      };
+      div.ondragend = () => div.classList.remove('dragging');
+    }
+
+    const color = COLORS[w.source] || COLORS.generic;
+    const bg = BGS[w.source] || BGS.generic;
+    const icon = ICONS[w.type] || '◈';
+    const count = w.items ? w.items.filter(i => i.unread).length : 0;
+    const isLoading = this.loading.has(w.id);
+
+    let body = '';
+    let items = w.items || [];
+    if (this.state.filter==='unread') items = items.filter(i => i.unread);
+    if (this.state.filter==='saved') items = items.filter(i => this.state.saved.includes(i.id));
+    if (this.state.filter==='alert') items = items.filter(i => i.alert);
+    if (this.state.searchQ) items = items.filter(i => (i.title||'').toLowerCase().includes(this.state.searchQ));
+
+    if (items.length === 0 && !isLoading) {
+      body = `<div style="padding:16px;font-size:11px;color:var(--text-mute);text-align:center">${w.url?'Aucun article':'Widget vide'}</div>`;
+    } else if (isLoading && items.length === 0) {
+      body = `<div style="padding:20px;text-align:center"><span class="spinner"></span></div>`;
+    } else {
+      body = items.slice(0,15).map(i => {
+        const pinned = this.state.saved.includes(i.id);
+        const kw = this.state.keywords.find(k => (i.title||'').toLowerCase().includes(k.toLowerCase()));
+        return `<div class="fi${i.unread?' unread':''}" onclick="S.openArticle('${i.id}')">
+          <div class="fi-src">${this.escape(i.src||'')}${i.alert?'<span class="badge" style="background:#FCEBEB;color:#A32D2D">alerte</span>':''}${pinned?'<span class="badge" style="background:#FAEEDA;color:#854F0B">📌</span>':''}${kw?`<span class="badge" style="background:#FAEEDA;color:#854F0B">${this.escape(kw)}</span>`:''}</div>
+          <div class="fi-t">${this.escape(i.title||'')}</div>
+          <div class="fi-time">${i.time||''}</div>
+        </div>`;
+      }).join('');
+    }
+
+    div.innerHTML = `
+      <div class="wh" title="Glisser pour déplacer">
+        <div class="wicon" style="background:${bg};color:${color}">${icon}</div>
+        <div class="wtitle">${this.escape(w.title)}</div>
+        ${count?`<div class="wmeta">${count} nv</div>`:(isLoading?'<span class="spinner"></span>':'')}
+        <div class="wacts">
+          <button class="wb" onclick="event.stopPropagation();S.fetchFeed('${w.id}')" title="Actualiser">↻</button>
+          <button class="wb" onclick="event.stopPropagation();S.toggleCollapse('${w.id}')" title="${w.collapsed?'Déplier':'Replier'}">${w.collapsed?'▼':'▲'}</button>
+          <button class="wb" onclick="event.stopPropagation();S.openCtx('${w.id}','${colId}',event)" title="Options">⋮</button>
+        </div>
+      </div>
+      <div class="wbody">${body}</div>`;
+    return div;
+  },
+
+  buildStatsWidget(){
+    const div = document.createElement('div');
+    div.className = 'widget';
+    const all = Object.values(this.state.widgets).flatMap(w => w.items || []);
+    const unread = all.filter(i => i.unread).length;
+    const alerts = all.filter(i => i.alert).length;
+    div.innerHTML = `
+      <div class="wh">
+        <div class="wicon" style="background:${BGS.generic};color:${COLORS.generic}">◫</div>
+        <div class="wtitle">Tableau de bord</div>
+      </div>
+      <div class="wbody"><div class="sw-grid">
+        <div class="sw-cell"><div class="sw-n">${all.length}</div><div class="sw-l">Articles total</div></div>
+        <div class="sw-cell"><div class="sw-n" style="color:${COLORS.rss}">${unread}</div><div class="sw-l">Non lus</div></div>
+        <div class="sw-cell"><div class="sw-n" style="color:#A32D2D">${alerts}</div><div class="sw-l">Alertes</div></div>
+        <div class="sw-cell"><div class="sw-n" style="color:#854F0B">${this.state.saved.length}</div><div class="sw-l">Épinglés</div></div>
+      </div></div>`;
+    return div;
+  },
+
+  updateWidget(wid){
+    const old = document.querySelector(`.widget[data-wid="${wid}"]`);
+    if (!old) return;
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    // trouver colId
+    let colId = null;
+    for (const cols of Object.values(this.state.columns)) {
+      for (const c of cols) if (c.widgets.includes(wid)) { colId = c.id; break; }
+      if (colId) break;
+    }
+    const neu = this.buildWidget(w, colId);
+    old.replaceWith(neu);
+  },
+
+  // --- interactions --------------------------------------------------
+  switchTab(id){
+    this.state.activeTab = id;
+    this.state.searchQ = '';
+    document.getElementById('sq').value = '';
+    this.render();
+    this.saveState();
+  },
+
+  setLayout(lc){
+    this.state.layouts[this.state.activeTab] = lc;
+    this.renderLayoutBar();
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  setFilter(f){
+    this.state.filter = f;
+    this.renderLayoutBar();
+    this.renderCanvas();
+  },
+
+  setView(v){
+    this.state.view = v;
+    this.renderLayoutBar();
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  search(q){
+    this.state.searchQ = q.toLowerCase().trim();
+    this.renderCanvas();
+  },
+
+  toggleCollapse(wid){
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    w.collapsed = !w.collapsed;
+    this.updateWidget(wid);
+    this.saveState();
+  },
+
+  markRead(id){
+    if (!this.state.readIds.includes(id)) this.state.readIds.push(id);
+    Object.values(this.state.widgets).forEach(w => {
+      if (w.items) { const i = w.items.find(x => x.id===id); if (i) i.unread = false; }
+    });
+    this.saveState();
+  },
+
+  // --- drag & drop ---------------------------------------------------
+  dropOnCol(colId){
+    if (!this.dragWidget) return;
+    const srcTab = this.dragFromTab || this.state.activeTab;
+    const srcCols = this.state.columns[srcTab] || [];
+    const sc = srcCols.find(c => c.id === this.dragFromCol);
+    if (sc) sc.widgets = sc.widgets.filter(w => w !== this.dragWidget);
+    const destCols = this.state.columns[this.state.activeTab] || [];
+    const dc = destCols.find(c => c.id === colId);
+    if (dc && !dc.widgets.includes(this.dragWidget)) dc.widgets.push(this.dragWidget);
+    this.dragWidget = this.dragFromCol = this.dragFromTab = null;
+    this.render();
+    this.saveState();
+    this.toast('Widget déplacé');
+  },
+
+  tabDragOver(e, tid){
+    e.preventDefault();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+    const el = document.querySelector(`.tab[data-tid="${tid}"]`);
+    if (el) el.classList.add('drag-over');
+  },
+
+  tabDragLeave(tid){
+    const el = document.querySelector(`.tab[data-tid="${tid}"]`);
+    if (el) el.classList.remove('drag-over');
+  },
+
+  tabDrop(e, tid){
+    e.preventDefault();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+    if (!this.dragWidget || tid === this.dragFromTab) return;
+    const srcCols = this.state.columns[this.dragFromTab] || [];
+    const sc = srcCols.find(c => c.id === this.dragFromCol);
+    if (sc) sc.widgets = sc.widgets.filter(w => w !== this.dragWidget);
+    const destCols = this.state.columns[tid] || [];
+    if (!destCols.length) destCols.push({id:mkId(),widgets:[]});
+    destCols[0].widgets.push(this.dragWidget);
+    this.dragWidget = this.dragFromCol = this.dragFromTab = null;
+    this.render();
+    this.saveState();
+    this.toast('Widget déplacé vers l\'onglet');
+  },
+
+  // --- context menu --------------------------------------------------
+  openCtx(wid, colId, e){
+    e.stopPropagation();
+    const ctx = document.getElementById('ctx');
+    ctx.style.display = 'block';
+    ctx.style.left = Math.min(e.clientX, window.innerWidth-190)+'px';
+    ctx.style.top = Math.min(e.clientY, window.innerHeight-180)+'px';
+    ctx.innerHTML = `
+      <div class="ctx-item" onclick="S.fetchFeed('${wid}');S.closeCtx()">Actualiser le flux</div>
+      <div class="ctx-item" onclick="S.markAllRead('${wid}')">Tout marquer comme lu</div>
+      <div class="ctx-item" onclick="S.editWidget('${wid}')">Modifier le widget…</div>
+      <div class="ctx-item" onclick="S.moveWidgetToTab('${wid}','${colId}')">Déplacer vers un onglet…</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item danger" onclick="S.removeWidget('${wid}','${colId}')">Supprimer le widget</div>`;
+  },
+
+  closeCtx(){ document.getElementById('ctx').style.display = 'none'; },
+
+  markAllRead(wid){
+    const w = this.state.widgets[wid];
+    if (w && w.items) w.items.forEach(i => {
+      i.unread = false;
+      if (!this.state.readIds.includes(i.id)) this.state.readIds.push(i.id);
+    });
+    this.closeCtx();
+    this.renderTabs();
+    this.renderCanvas();
+    this.saveState();
+    this.toast('Tous marqués lus');
+  },
+
+  editWidget(wid){
+    this.closeCtx();
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Modifier le widget</h3>
+      <div class="mrow"><label>Titre</label><input id="ew-title" type="text" value="${this.escape(w.title)}"></div>
+      <div class="mrow"><label>URL du flux</label><input id="ew-url" type="text" value="${this.escape(w.url||'')}"></div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-p" onclick="S.doEditWidget('${wid}')">Enregistrer</button>
+      </div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  doEditWidget(wid){
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    w.title = document.getElementById('ew-title').value.trim() || w.title;
+    const newUrl = document.getElementById('ew-url').value.trim();
+    const urlChanged = newUrl !== w.url;
+    w.url = newUrl;
+    this.closeModal();
+    this.render();
+    if (urlChanged) this.fetchFeed(wid);
+    this.saveState();
+  },
+
+  moveWidgetToTab(wid, colId){
+    this.closeCtx();
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Déplacer vers un onglet</h3>
+      <div class="mrow"><label>Onglet destination</label>
+      <select id="mv-tab">${this.state.tabs.filter(t => t.id!==this.state.activeTab).map(t => `<option value="${t.id}">${this.escape(t.label)}</option>`).join('')}</select></div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-p" onclick="S.doMoveWidget('${wid}','${colId}')">Déplacer</button>
+      </div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  doMoveWidget(wid, colId){
+    const dest = document.getElementById('mv-tab').value;
+    const srcCols = this.state.columns[this.state.activeTab] || [];
+    const sc = srcCols.find(c => c.id === colId);
+    if (sc) sc.widgets = sc.widgets.filter(w => w !== wid);
+    const destCols = this.state.columns[dest] || [];
+    if (!destCols.length) destCols.push({id:mkId(),widgets:[]});
+    destCols[0].widgets.push(wid);
+    this.closeModal();
+    this.render();
+    this.saveState();
+    this.toast('Widget déplacé');
+  },
+
+  removeWidget(wid, colId){
+    Object.values(this.state.columns).forEach(cols => cols.forEach(c => {
+      c.widgets = c.widgets.filter(w => w !== wid);
+    }));
+    delete this.state.widgets[wid];
+    this.closeCtx();
+    this.renderTabs();
+    this.renderCanvas();
+    this.saveState();
+    this.toast('Widget supprimé');
+  },
+
+  // --- add widget / tab ---------------------------------------------
+  openAddWidget(){
+    const cols = this.state.columns[this.state.activeTab] || [];
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Ajouter un flux</h3>
+      <div class="mrow"><label>Titre du widget</label><input id="wt-title" placeholder="Ex: Le Monde — Tech" type="text"></div>
+      <div class="mrow"><label>URL du flux RSS / Atom</label><input id="wt-url" placeholder="https://…/feed.xml" type="text"></div>
+      <div class="mrow"><label>Onglet</label><select id="wt-tab">${this.state.tabs.map(t => `<option value="${t.id}"${t.id===this.state.activeTab?' selected':''}>${this.escape(t.label)}</option>`).join('')}</select></div>
+      <div class="mrow"><label>Colonne</label><select id="wt-col">${cols.map((c,i) => `<option value="${c.id}">Colonne ${i+1}</option>`).join('')}</select></div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-p" onclick="S.doAddWidget()">Ajouter</button>
+      </div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  doAddWidget(){
+    const title = document.getElementById('wt-title').value.trim() || 'Nouveau flux';
+    const url = document.getElementById('wt-url').value.trim();
+    const tab = document.getElementById('wt-tab').value;
+    const colId = document.getElementById('wt-col').value;
+    if (!url) { this.toast('URL manquante'); return; }
+    const id = mkId();
+    this.state.widgets[id] = {id, type:'rss', title, source:'rss', collapsed:false, url, items:[]};
+    const col = (this.state.columns[tab] || []).find(c => c.id === colId);
+    if (col) col.widgets.push(id);
+    this.closeModal();
+    this.render();
+    this.saveState();
+    this.fetchFeed(id);
+    this.toast(`Flux "${title}" ajouté`);
+  },
+
+  openAddTab(){
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Nouvel onglet</h3>
+      <div class="mrow"><label>Nom</label><input id="tab-name" placeholder="Ex: Cybersécurité…" type="text"></div>
+      <div class="mrow"><label>Couleur</label><select id="tab-color">${[['#185FA5','Bleu'],['#0F6E56','Vert'],['#854F0B','Ambre'],['#A32D2D','Rouge'],['#5F5E5A','Gris'],['#534AB7','Violet']].map(([v,l]) => `<option value="${v}">${l}</option>`).join('')}</select></div>
+      <div class="mrow"><label>Colonnes par défaut</label><select id="tab-lc"><option value="2">2 colonnes</option><option value="3" selected>3 colonnes</option><option value="4">4 colonnes</option></select></div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-p" onclick="S.doAddTab()">Créer</button>
+      </div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  doAddTab(){
+    const label = document.getElementById('tab-name').value.trim() || 'Nouveau';
+    const color = document.getElementById('tab-color').value;
+    const lc = document.getElementById('tab-lc').value;
+    const id = mkId();
+    this.state.tabs.push({id, label, color});
+    this.state.layouts[id] = lc;
+    const n = parseInt(lc);
+    this.state.columns[id] = [];
+    for (let i = 0; i < n; i++) this.state.columns[id].push({id:mkId(),widgets:[]});
+    this.closeModal();
+    this.switchTab(id);
+    this.toast(`Onglet "${label}" créé`);
+  },
+
+  // --- tab menu ------------------------------------------------------
+  openTabMenu(tid, e){
+    e.stopPropagation();
+    const ctx = document.getElementById('ctx');
+    ctx.style.display = 'block';
+    ctx.style.left = Math.min(e.clientX, window.innerWidth-190)+'px';
+    ctx.style.top = (e.clientY+8)+'px';
+    ctx.innerHTML = `
+      <div class="ctx-item" onclick="S.renameTab('${tid}')">Renommer l'onglet</div>
+      <div class="ctx-item" onclick="S.duplicateTab('${tid}')">Dupliquer l'onglet</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item danger" onclick="S.deleteTab('${tid}')">Supprimer l'onglet</div>`;
+  },
+
+  renameTab(tid){
+    this.closeCtx();
+    const tab = this.state.tabs.find(t => t.id===tid);
+    if (!tab) return;
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Renommer l'onglet</h3>
+      <div class="mrow"><label>Nouveau nom</label><input id="rn-name" value="${this.escape(tab.label)}" type="text"></div>
+      <div class="mfooter"><button class="btn-g" onclick="S.closeModal()">Annuler</button><button class="btn-p" onclick="S.doRenameTab('${tid}')">OK</button></div>`;
+    document.getElementById('ov').classList.add('on');
+    setTimeout(() => { const i = document.getElementById('rn-name'); if (i) i.select(); }, 50);
+  },
+
+  doRenameTab(tid){
+    const tab = this.state.tabs.find(t => t.id===tid);
+    if (tab) tab.label = document.getElementById('rn-name').value.trim() || tab.label;
+    this.closeModal();
+    this.render();
+    this.saveState();
+  },
+
+  duplicateTab(tid){
+    this.closeCtx();
+    const tab = this.state.tabs.find(t => t.id===tid);
+    if (!tab) return;
+    const nid = mkId();
+    this.state.tabs.push({...tab, id:nid, label:tab.label+' (copie)'});
+    const srcCols = this.state.columns[tid] || [];
+    // dupliquer aussi les widgets (nouveaux IDs)
+    const newWidgetMap = {};
+    srcCols.forEach(c => c.widgets.forEach(wid => {
+      const w = this.state.widgets[wid];
+      if (w) {
+        const newId = mkId();
+        this.state.widgets[newId] = {...JSON.parse(JSON.stringify(w)), id:newId};
+        newWidgetMap[wid] = newId;
+      }
+    }));
+    this.state.columns[nid] = srcCols.map(c => ({
+      id: mkId(),
+      widgets: c.widgets.map(wid => newWidgetMap[wid]).filter(Boolean)
+    }));
+    this.state.layouts[nid] = this.state.layouts[tid] || '3';
+    this.render();
+    this.saveState();
+    this.toast('Onglet dupliqué');
+  },
+
+  deleteTab(tid){
+    this.closeCtx();
+    if (this.state.tabs.length <= 1) { this.toast('Impossible de supprimer le dernier onglet'); return; }
+    if (!confirm('Supprimer cet onglet et tous ses widgets ?')) return;
+    // supprimer aussi les widgets
+    const cols = this.state.columns[tid] || [];
+    cols.forEach(c => c.widgets.forEach(wid => delete this.state.widgets[wid]));
+    this.state.tabs = this.state.tabs.filter(t => t.id !== tid);
+    delete this.state.columns[tid];
+    delete this.state.layouts[tid];
+    if (this.state.activeTab === tid) this.state.activeTab = this.state.tabs[0].id;
+    this.render();
+    this.saveState();
+    this.toast('Onglet supprimé');
+  },
+
+  // --- article reader ------------------------------------------------
+  openArticle(id){
+    let art = null, wt = '';
+    Object.values(this.state.widgets).forEach(w => {
+      if (w.items) { const i = w.items.find(x => x.id===id); if (i) { art = i; wt = w.title; } }
+    });
+    if (!art) return;
+    this.curArt = {...art, wt};
+    this.markRead(id);
+    document.getElementById('rsrc').textContent = (art.src || wt);
+    document.getElementById('rtitle').textContent = (art.title || '');
+    document.getElementById('rmeta').innerHTML = `<span>${art.time||''}</span><span>${this.escape(wt)}</span>${art.alert?'<span style="background:#FCEBEB;color:#A32D2D;padding:1px 6px;border-radius:3px;font-size:10px">alerte</span>':''}`;
+    document.getElementById('rcontent').innerHTML = art.summary ? `<p>${this.escape(art.summary)}</p>` : '<p style="color:var(--text-mute)"><em>Pas d\'extrait disponible. Clique sur "Lire l\'article" pour accéder au contenu complet.</em></p>';
+    document.getElementById('raction').innerHTML = `
+      ${art.link?`<a class="btn-p" href="${this.escape(art.link)}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">Lire l'article →</a>`:''}
+      ${IS_PUBLIC ? '' : `<button class="btn-g" onclick="S.pinCurrentArticle()">${this.state.saved.includes(id)?'Désépingler':'Épingler'}</button>`}
+      <button class="btn-g" onclick="S.shareArticle()">Copier le lien</button>`;
+    document.getElementById('pin-btn').textContent = this.state.saved.includes(id) ? 'Désépingler' : 'Épingler';
+    document.getElementById('reader').classList.add('on');
+    this.renderTabs();
+    this.renderCanvas();
+  },
+
+  closeReader(){ document.getElementById('reader').classList.remove('on'); },
+
+  pinCurrentArticle(){
+    if (!this.curArt) return;
+    const id = this.curArt.id;
+    if (this.state.saved.includes(id)) {
+      this.state.saved = this.state.saved.filter(x => x !== id);
+      this.toast('Désépinglé');
+    } else {
+      this.state.saved.push(id);
+      this.toast('Article épinglé');
+    }
+    document.getElementById('pin-btn').textContent = this.state.saved.includes(id) ? 'Désépingler' : 'Épingler';
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  shareArticle(){
+    if (!this.curArt || !this.curArt.link) return;
+    navigator.clipboard.writeText(this.curArt.link).then(() => this.toast('Lien copié')).catch(() => this.toast('Copie impossible'));
+  },
+
+  // --- settings ------------------------------------------------------
+  openSettings(){
+    const publicUrl = window.location.origin + window.location.pathname + '?view=public';
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Paramètres</h3>
+      <div class="mrow" style="background:var(--bg-soft);padding:10px;border-radius:var(--radius)">
+        <label style="font-weight:500;color:var(--text)">🔗 Partager ce dashboard en lecture seule</label>
+        <p style="font-size:11px;color:var(--text-soft);margin:4px 0 6px">Envoie cette URL à qui tu veux. Les visiteurs verront ta configuration mais ne pourront rien modifier.</p>
+        <input id="share-url" type="text" readonly value="${this.escape(publicUrl)}" onclick="this.select()" style="font-size:11px">
+        <button class="btn-g" style="margin-top:6px;width:100%" onclick="S.copyShareLink()">Copier le lien</button>
+      </div>
+      <div class="mrow"><label>URL du backend</label><input id="set-url" type="text" value="${this.escape(this.backendUrl||'')}" placeholder="https://…onrender.com"></div>
+      <div class="mrow"><label>Mots-clés d'alerte (un par ligne)</label><textarea id="set-kw">${this.escape(this.state.keywords.join('\n'))}</textarea></div>
+      <div class="mrow" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn-g" onclick="S.exportOPML()">Exporter OPML</button>
+        <button class="btn-g" onclick="S.importOPMLPrompt()">Importer OPML</button>
+        <button class="btn-g" onclick="S.exportJSON()">Export config</button>
+      </div>
+      <div class="mrow" style="margin-top:16px">
+        <button class="btn-g" style="color:#c94747" onclick="S.resetAll()">Réinitialiser tout</button>
+      </div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-p" onclick="S.saveSettings()">Enregistrer</button>
+      </div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  copyShareLink(){
+    const url = document.getElementById('share-url').value;
+    navigator.clipboard.writeText(url).then(() => this.toast('Lien copié')).catch(() => {
+      document.getElementById('share-url').select();
+      document.execCommand('copy');
+      this.toast('Lien copié');
+    });
+  },
+
+  saveSettings(){
+    let url = document.getElementById('set-url').value.trim();
+    if (url.endsWith('/')) url = url.slice(0,-1);
+    if (url !== this.backendUrl) {
+      if (url) localStorage.setItem(LS_BACKEND, url); else localStorage.removeItem(LS_BACKEND);
+      this.backendUrl = url || null;
+      this.checkBackend();
+    }
+    const kw = document.getElementById('set-kw').value.split('\n').map(s => s.trim()).filter(Boolean);
+    this.state.keywords = kw;
+    this.closeModal();
+    this.saveState();
+    this.render();
+    this.toast('Paramètres enregistrés');
+  },
+
+  exportOPML(){
+    const feeds = Object.values(this.state.widgets).filter(w => w.type==='rss' && w.url);
+    const now = new Date().toISOString();
+    const opml = `<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head><title>Veille Export</title><dateCreated>${now}</dateCreated></head>
+  <body>
+${feeds.map(w => `    <outline text="${this.escape(w.title)}" title="${this.escape(w.title)}" type="rss" xmlUrl="${this.escape(w.url)}"/>`).join('\n')}
+  </body>
+</opml>`;
+    const b = new Blob([opml], {type:'text/xml'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'veille-export.opml';
+    a.click();
+    this.toast('OPML téléchargé');
+  },
+
+  importOPMLPrompt(){
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.opml,.xml';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const text = await file.text();
+      this.importOPML(text);
+    };
+    input.click();
+  },
+
+  importOPML(xml){
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'text/xml');
+    const outlines = doc.querySelectorAll('outline[xmlUrl]');
+    let n = 0;
+    const cols = this.state.columns[this.state.activeTab] || [];
+    if (!cols.length) return this.toast('Pas de colonne disponible');
+    outlines.forEach((o, i) => {
+      const url = o.getAttribute('xmlUrl');
+      const title = o.getAttribute('title') || o.getAttribute('text') || url;
+      if (!url) return;
+      const id = mkId();
+      this.state.widgets[id] = {id,type:'rss',title,source:'rss',collapsed:false,url,items:[]};
+      const col = cols[i % cols.length];
+      col.widgets.push(id);
+      n++;
+      this.fetchFeed(id);
+    });
+    this.saveState();
+    this.render();
+    this.toast(n + ' flux importés');
+  },
+
+  exportJSON(){
+    const b = new Blob([JSON.stringify(this.state, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'veille-config.json';
+    a.click();
+    this.toast('Configuration exportée');
+  },
+
+  resetAll(){
+    if (!confirm('Effacer toute la configuration locale ? (les flux seront perdus)')) return;
+    localStorage.removeItem(LS_STATE);
+    location.reload();
+  },
+
+  // --- utils ---------------------------------------------------------
+  closeModal(){ document.getElementById('ov').classList.remove('on'); },
+
+  toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => t.classList.remove('on'), 2500);
+  },
+
+  escape(s){
+    if (s === undefined || s === null) return '';
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+  }
+};
+
+// --- global event listeners ------------------------------------------
+document.addEventListener('click', e => {
+  const ctx = document.getElementById('ctx');
+  if (ctx && !ctx.contains(e.target)) ctx.style.display = 'none';
+});
+document.getElementById('ov').addEventListener('click', e => {
+  if (e.target.id === 'ov') S.closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { S.closeModal(); S.closeReader(); S.closeCtx(); }
+});
+
+S.init();
+</script>
+</body>
+</html>
