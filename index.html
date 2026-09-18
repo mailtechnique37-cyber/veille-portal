@@ -6,6 +6,8 @@
 <title>Veille — Portail</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
+/* Palette claire (par défaut) */
 :root{
   --bg:#f7f7f4; --bg-panel:#fff; --bg-soft:#f1efe8;
   --text:#2c2c2a; --text-soft:#5f5e5a; --text-mute:#888780;
@@ -13,17 +15,57 @@
   --accent:#185FA5; --accent-bg:#E6F1FB;
   --radius:8px; --radius-lg:12px;
   --font:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  /* Densité normale par défaut */
+  --pad-xs:4px; --pad-sm:8px; --pad-md:12px; --pad-lg:16px;
+  --font-body:13px; --font-small:11px; --font-xs:10px;
+  --line-h:1.4;
+  --widget-item-pad:9px 12px;
+  --tab-pad:8px 12px;
 }
+
+/* Thème automatique (suit le système) */
 @media (prefers-color-scheme:dark){
-  :root{
+  html:not([data-theme="light"]) :root, html:not([data-theme="light"]){
     --bg:#1a1a18; --bg-panel:#242421; --bg-soft:#2c2c2a;
     --text:#ececea; --text-soft:#b4b2a9; --text-mute:#888780;
     --border:rgba(255,255,255,0.1); --border-strong:rgba(255,255,255,0.18);
     --accent:#7FB6F0; --accent-bg:rgba(127,182,240,0.15);
   }
 }
+
+/* Thème sombre forcé */
+html[data-theme="dark"]{
+  --bg:#1a1a18; --bg-panel:#242421; --bg-soft:#2c2c2a;
+  --text:#ececea; --text-soft:#b4b2a9; --text-mute:#888780;
+  --border:rgba(255,255,255,0.1); --border-strong:rgba(255,255,255,0.18);
+  --accent:#7FB6F0; --accent-bg:rgba(127,182,240,0.15);
+}
+
+/* Thème clair forcé (aucune surcharge en dark) */
+html[data-theme="light"]{
+  /* déjà en :root par défaut */
+}
+
+/* Densité compacte */
+html[data-density="compact"]{
+  --pad-xs:2px; --pad-sm:5px; --pad-md:8px; --pad-lg:12px;
+  --font-body:12px; --font-small:10px; --font-xs:9px;
+  --line-h:1.3;
+  --widget-item-pad:6px 10px;
+  --tab-pad:6px 10px;
+}
+
+/* Densité confortable */
+html[data-density="comfortable"]{
+  --pad-xs:6px; --pad-sm:11px; --pad-md:16px; --pad-lg:22px;
+  --font-body:14px; --font-small:12px; --font-xs:11px;
+  --line-h:1.55;
+  --widget-item-pad:12px 16px;
+  --tab-pad:10px 14px;
+}
+
 html,body{height:100%}
-body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:var(--font-body);overflow:hidden}
 
 #app{display:flex;flex-direction:column;height:100vh;position:relative}
 
@@ -47,7 +89,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13
 
 /* TABBAR */
 #tabbar{background:var(--bg-panel);border-bottom:1px solid var(--border);display:flex;align-items:flex-end;padding:0 10px;gap:1px;overflow-x:auto;flex-shrink:0;z-index:19;scrollbar-width:thin}
-.tab{display:flex;align-items:center;gap:6px;padding:8px 12px;font-size:12px;border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;color:var(--text-soft);white-space:nowrap;user-select:none;position:relative}
+.tab{display:flex;align-items:center;gap:6px;padding:var(--tab-pad);font-size:var(--font-small);border:1px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;color:var(--text-soft);white-space:nowrap;user-select:none;position:relative}
 .tab:hover{background:var(--bg-soft)}
 .tab.active{background:var(--bg);border-color:var(--border);color:var(--text);font-weight:500;bottom:-1px}
 .tab.drag-over{background:var(--accent-bg)}
@@ -57,6 +99,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13
 .tab:hover .tab-menu-btn{opacity:1}
 .tab-add{padding:6px 10px;font-size:14px;color:var(--text-mute);cursor:pointer;border-radius:6px 6px 0 0;border:none;background:transparent;font-family:inherit}
 .tab-add:hover{background:var(--bg-soft);color:var(--text)}
+.tab-star{color:#EF9F27;font-size:11px;flex-shrink:0}
+.tab.pinned{cursor:pointer}
+.tab.reorder-drop-before::before{content:"";position:absolute;left:-1px;top:5px;bottom:0;width:2px;background:var(--accent)}
+.tab.reorder-drop-after::after{content:"";position:absolute;right:-1px;top:5px;bottom:0;width:2px;background:var(--accent)}
 
 /* LAYOUT TOOLBAR */
 #layout-bar{background:var(--bg-soft);border-bottom:1px solid var(--border);padding:5px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
@@ -100,13 +146,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13
 .widget.loading .wbody{opacity:.5}
 
 /* FEED ITEMS */
-.fi{padding:9px 12px;border-bottom:1px solid var(--border);cursor:pointer;display:block;color:inherit;text-decoration:none}
+.fi{padding:var(--widget-item-pad);border-bottom:1px solid var(--border);cursor:pointer;display:block;color:inherit;text-decoration:none}
 .fi:last-child{border-bottom:none}
 .fi:hover{background:var(--bg-soft)}
-.fi-src{font-size:9px;color:var(--text-mute);margin-bottom:3px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
-.fi-t{font-size:12px;line-height:1.4;color:var(--text)}
+.fi-src{font-size:var(--font-xs);color:var(--text-mute);margin-bottom:3px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.fi-t{font-size:var(--font-small);line-height:var(--line-h);color:var(--text)}
 .fi.unread .fi-t{font-weight:500}
-.fi-time{font-size:9px;color:var(--text-mute);margin-top:3px}
+.fi-time{font-size:var(--font-xs);color:var(--text-mute);margin-top:3px}
 .badge{font-size:9px;padding:1px 5px;border-radius:2px;font-weight:500}
 
 /* STATS */
@@ -226,6 +272,7 @@ body.public-mode #filter-pills .fpill[data-f="saved"],body.public-mode #filter-p
     </div>
     <button class="tbtn" onclick="S.refreshAll()" title="Rafraîchir tous les flux">↻</button>
     <button class="tbtn public-hide" onclick="S.openAddWidget()">+ Flux</button>
+    <button class="tbtn" onclick="S.openDashboard()" title="Tableau de bord">📊</button>
     <button class="tbtn public-hide" onclick="S.openSettings()">⚙</button>
     <div id="public-banner" title="Mode lecture seule"><span class="dot"></span>Lecture seule</div>
   </div>
@@ -286,6 +333,8 @@ body.public-mode #filter-pills .fpill[data-f="saved"],body.public-mode #filter-p
 
 const LS_BACKEND = 'veille_backend_url';
 const LS_STATE = 'veille_state_v2';
+const LS_THEME = 'veille_theme';
+const LS_DENSITY = 'veille_density';
 
 // --- Détection du mode public (lecture seule) ---
 // Active si l'URL contient ?view=public
@@ -294,6 +343,14 @@ const IS_PUBLIC = new URLSearchParams(window.location.search).get('view') === 'p
 // En mode public : URL du backend "hardcodée" ici après ton premier déploiement
 // Remplace cette chaîne par ton URL Render une fois que tout est configuré
 const PUBLIC_BACKEND_URL = 'https://veille-backend-160e.onrender.com';
+
+// --- Appliquer thème et densité dès le chargement (avant tout render) ---
+(function applyInitialTheme(){
+  const theme = localStorage.getItem(LS_THEME) || 'auto';
+  const density = localStorage.getItem(LS_DENSITY) || 'normal';
+  if (theme !== 'auto') document.documentElement.setAttribute('data-theme', theme);
+  if (density !== 'normal') document.documentElement.setAttribute('data-density', density);
+})();
 const COLORS = {rss:'#185FA5',social:'#0F6E56',email:'#854F0B',youtube:'#A32D2D',generic:'#5F5E5A'};
 const BGS = {rss:'#E6F1FB',social:'#E1F5EE',email:'#FAEEDA',youtube:'#FCEBEB',generic:'#F1EFE8'};
 const ICONS = {rss:'◈',social:'◉',email:'✉',youtube:'▶',stats:'◫'};
@@ -592,17 +649,26 @@ const S = {
       }));
       unreadByTab[t.id] = n;
     });
-    bar.innerHTML = this.state.tabs.map(t => `
-      <div class="tab${t.id===this.state.activeTab?' active':''}" data-tid="${t.id}"
+    // Trier : épinglés d'abord (dans leur ordre), puis non-épinglés (dans leur ordre)
+    const pinnedTabs = this.state.tabs.filter(t => t.pinned);
+    const otherTabs = this.state.tabs.filter(t => !t.pinned);
+    const orderedTabs = [...pinnedTabs, ...otherTabs];
+
+    bar.innerHTML = orderedTabs.map(t => `
+      <div class="tab${t.id===this.state.activeTab?' active':''}${t.pinned?' pinned':''}" data-tid="${t.id}"
+        ${!IS_PUBLIC && !t.pinned ? 'draggable="true"' : ''}
         onclick="S.switchTab('${t.id}')"
+        ${!IS_PUBLIC ? `ondragstart="S.tabReorderDragStart(event,'${t.id}')"
+        ondragend="S.tabReorderDragEnd(event)"
         ondragover="S.tabDragOver(event,'${t.id}')"
         ondragleave="S.tabDragLeave('${t.id}')"
-        ondrop="S.tabDrop(event,'${t.id}')">
+        ondrop="S.tabDrop(event,'${t.id}')"` : ''}>
+        ${t.pinned ? '<span class="tab-star" title="Onglet épinglé">★</span>' : ''}
         <div class="tab-pip" style="background:${t.color}"></div>
         ${this.escape(t.label)}
         ${unreadByTab[t.id] ? `<span class="tab-unread">${unreadByTab[t.id]}</span>` : ''}
         <span class="tab-menu-btn" onclick="event.stopPropagation();S.openTabMenu('${t.id}',event)">▾</span>
-      </div>`).join('') + `<button class="tab-add" onclick="S.openAddTab()" title="Nouvel onglet">+</button>`;
+      </div>`).join('') + `<button class="tab-add public-hide" onclick="S.openAddTab()" title="Nouvel onglet">+</button>`;
   },
 
   renderLayoutBar(){
@@ -656,10 +722,6 @@ const S = {
           const w = this.state.widgets[wid];
           if (w) div.appendChild(this.buildWidget(w, col.id));
         });
-      }
-      // widget stats dans la première colonne seulement si on est sur le premier onglet
-      if (ci === cols.length - 1 && this.state.activeTab === this.state.tabs[0].id && !this.state.searchQ) {
-        div.appendChild(this.buildStatsWidget());
       }
       cl.appendChild(div);
     });
@@ -870,6 +932,19 @@ const S = {
 
   tabDragOver(e, tid){
     e.preventDefault();
+    // Si c'est un onglet qu'on réordonne, gérer avec insertion before/after
+    if (this.dragTabId) {
+      const el = document.querySelector(`.tab[data-tid="${tid}"]`);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const before = e.clientX < rect.left + rect.width/2;
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('reorder-drop-before','reorder-drop-after');
+      });
+      el.classList.add(before ? 'reorder-drop-before' : 'reorder-drop-after');
+      return;
+    }
+    // Sinon, c'est un widget qu'on drop sur un onglet
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
     const el = document.querySelector(`.tab[data-tid="${tid}"]`);
     if (el) el.classList.add('drag-over');
@@ -877,12 +952,21 @@ const S = {
 
   tabDragLeave(tid){
     const el = document.querySelector(`.tab[data-tid="${tid}"]`);
-    if (el) el.classList.remove('drag-over');
+    if (el) el.classList.remove('drag-over','reorder-drop-before','reorder-drop-after');
   },
 
   tabDrop(e, tid){
     e.preventDefault();
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over','reorder-drop-before','reorder-drop-after'));
+    // Cas 1 : réorganisation d'onglets
+    if (this.dragTabId && this.dragTabId !== tid) {
+      const targetEl = document.querySelector(`.tab[data-tid="${tid}"]`);
+      const before = e.clientX < (targetEl ? targetEl.getBoundingClientRect().left + targetEl.getBoundingClientRect().width/2 : 0);
+      this.reorderTab(this.dragTabId, tid, before);
+      this.dragTabId = null;
+      return;
+    }
+    // Cas 2 : widget droppé sur un onglet
     if (!this.dragWidget || tid === this.dragFromTab) return;
     const srcCols = this.state.columns[this.dragFromTab] || [];
     const sc = srcCols.find(c => c.id === this.dragFromCol);
@@ -894,6 +978,43 @@ const S = {
     this.render();
     this.saveState();
     this.toast('Widget déplacé vers l\'onglet');
+  },
+
+  // Nouvelle : drag&drop d'onglets pour réordonner
+  tabReorderDragStart(e, tid){
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab || tab.pinned) { e.preventDefault(); return; }
+    this.dragTabId = tid;
+    e.dataTransfer.effectAllowed = 'move';
+    e.stopPropagation();
+  },
+
+  tabReorderDragEnd(){
+    this.dragTabId = null;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('reorder-drop-before','reorder-drop-after'));
+  },
+
+  reorderTab(srcId, destId, before){
+    const srcTab = this.state.tabs.find(t => t.id === srcId);
+    const destTab = this.state.tabs.find(t => t.id === destId);
+    if (!srcTab || !destTab || srcTab.pinned) return;
+    // Ne pas insérer parmi les épinglés
+    if (destTab.pinned && before) return;
+    this.state.tabs = this.state.tabs.filter(t => t.id !== srcId);
+    const destIdx = this.state.tabs.findIndex(t => t.id === destId);
+    this.state.tabs.splice(before ? destIdx : destIdx+1, 0, srcTab);
+    this.render();
+    this.saveState();
+  },
+
+  toggleTabPin(tid){
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    tab.pinned = !tab.pinned;
+    this.closeCtx();
+    this.render();
+    this.saveState();
+    this.toast(tab.pinned ? 'Onglet épinglé' : 'Onglet désépinglé');
   },
 
   // --- context menu --------------------------------------------------
@@ -1031,13 +1152,20 @@ const S = {
     document.getElementById('modal-body').innerHTML = `
       <h3>Nouvel onglet</h3>
       <div class="mrow"><label>Nom</label><input id="tab-name" placeholder="Ex: Cybersécurité…" type="text"></div>
-      <div class="mrow"><label>Couleur</label><select id="tab-color">${[['#185FA5','Bleu'],['#0F6E56','Vert'],['#854F0B','Ambre'],['#A32D2D','Rouge'],['#5F5E5A','Gris'],['#534AB7','Violet']].map(([v,l]) => `<option value="${v}">${l}</option>`).join('')}</select></div>
+      <div class="mrow"><label>Couleur (illimitée)</label>
+        <input type="color" id="tab-color" value="#185FA5" style="width:100%;height:40px;padding:2px;cursor:pointer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+          ${['#185FA5','#0F6E56','#854F0B','#A32D2D','#5F5E5A','#534AB7','#E17F0C','#0E7C7B','#B23A48','#4C956C'].map(c => `
+            <button type="button" style="width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:${c};cursor:pointer" onclick="document.getElementById('tab-color').value='${c}'"></button>`).join('')}
+        </div>
+      </div>
       <div class="mrow"><label>Colonnes par défaut</label><select id="tab-lc"><option value="2">2 colonnes</option><option value="3" selected>3 colonnes</option><option value="4">4 colonnes</option></select></div>
       <div class="mfooter">
         <button class="btn-g" onclick="S.closeModal()">Annuler</button>
         <button class="btn-p" onclick="S.doAddTab()">Créer</button>
       </div>`;
     document.getElementById('ov').classList.add('on');
+    setTimeout(()=>{const i=document.getElementById('tab-name');if(i)i.focus();},50);
   },
 
   doAddTab(){
@@ -1058,15 +1186,50 @@ const S = {
   // --- tab menu ------------------------------------------------------
   openTabMenu(tid, e){
     e.stopPropagation();
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
     const ctx = document.getElementById('ctx');
     ctx.style.display = 'block';
     ctx.style.left = Math.min(e.clientX, window.innerWidth-190)+'px';
     ctx.style.top = (e.clientY+8)+'px';
     ctx.innerHTML = `
+      <div class="ctx-item" onclick="S.toggleTabPin('${tid}')">${tab.pinned ? '☆ Désépingler l\'onglet' : '★ Épingler l\'onglet'}</div>
       <div class="ctx-item" onclick="S.renameTab('${tid}')">Renommer l'onglet</div>
+      <div class="ctx-item" onclick="S.recolorTab('${tid}')">Changer la couleur…</div>
       <div class="ctx-item" onclick="S.duplicateTab('${tid}')">Dupliquer l'onglet</div>
       <div class="ctx-sep"></div>
       <div class="ctx-item danger" onclick="S.deleteTab('${tid}')">Supprimer l'onglet</div>`;
+  },
+
+  recolorTab(tid){
+    this.closeCtx();
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Couleur de l'onglet</h3>
+      <div class="mrow"><label>Choisir une couleur (illimitée)</label>
+        <input type="color" id="rc-color" value="${tab.color}" style="width:100%;height:40px;padding:2px;cursor:pointer">
+      </div>
+      <div class="mrow">
+        <label style="font-size:10px">Suggestions</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+          ${['#185FA5','#0F6E56','#854F0B','#A32D2D','#5F5E5A','#534AB7','#E17F0C','#0E7C7B','#B23A48','#4C956C'].map(c => `
+            <button style="width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:${c};cursor:pointer" onclick="document.getElementById('rc-color').value='${c}'"></button>`).join('')}
+        </div>
+      </div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-p" onclick="S.doRecolorTab('${tid}')">OK</button>
+      </div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  doRecolorTab(tid){
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (tab) tab.color = document.getElementById('rc-color').value;
+    this.closeModal();
+    this.render();
+    this.saveState();
   },
 
   renameTab(tid){
@@ -1177,32 +1340,150 @@ const S = {
     navigator.clipboard.writeText(this.curArt.link).then(() => this.toast('Lien copié')).catch(() => this.toast('Copie impossible'));
   },
 
+  // --- dashboard (stats en modal) ------------------------------------
+  openDashboard(){
+    const all = Object.values(this.state.widgets).flatMap(w => w.items || []);
+    const unread = all.filter(i => i.unread).length;
+    const alerts = all.filter(i => i.alert).length;
+    const saved = this.state.saved.length;
+    // stats par onglet
+    const tabStats = this.state.tabs.map(t => {
+      const cols = this.state.columns[t.id] || [];
+      let widgets = 0, articles = 0, un = 0;
+      cols.forEach(c => c.widgets.forEach(wid => {
+        const w = this.state.widgets[wid];
+        if (w) {
+          widgets++;
+          if (w.items) { articles += w.items.length; un += w.items.filter(i=>i.unread).length; }
+        }
+      }));
+      return { label: t.label, color: t.color, widgets, articles, unread: un };
+    });
+    // top mots-clés d'alerte matchés
+    const kwCounts = {};
+    this.state.keywords.forEach(k => kwCounts[k] = 0);
+    all.forEach(i => {
+      const t = (i.title || '').toLowerCase();
+      this.state.keywords.forEach(k => { if (t.includes(k.toLowerCase())) kwCounts[k]++; });
+    });
+    const topKw = Object.entries(kwCounts).sort((a,b) => b[1]-a[1]).slice(0,5);
+
+    document.getElementById('modal-body').innerHTML = `
+      <h3>📊 Tableau de bord</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0">
+        <div style="background:var(--bg-soft);padding:12px;border-radius:var(--radius)">
+          <div style="font-size:22px;font-weight:500">${all.length}</div>
+          <div style="font-size:10px;color:var(--text-mute)">Articles total</div>
+        </div>
+        <div style="background:var(--bg-soft);padding:12px;border-radius:var(--radius)">
+          <div style="font-size:22px;font-weight:500;color:var(--accent)">${unread}</div>
+          <div style="font-size:10px;color:var(--text-mute)">Non lus</div>
+        </div>
+        <div style="background:var(--bg-soft);padding:12px;border-radius:var(--radius)">
+          <div style="font-size:22px;font-weight:500;color:#A32D2D">${alerts}</div>
+          <div style="font-size:10px;color:var(--text-mute)">Alertes actives</div>
+        </div>
+        <div style="background:var(--bg-soft);padding:12px;border-radius:var(--radius)">
+          <div style="font-size:22px;font-weight:500;color:#854F0B">${saved}</div>
+          <div style="font-size:10px;color:var(--text-mute)">Épinglés</div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:11px;font-weight:500;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Par onglet</div>
+        ${tabStats.map(s => `
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+            <div style="width:8px;height:8px;border-radius:50%;background:${s.color}"></div>
+            <div style="flex:1">${this.escape(s.label)}</div>
+            <div style="color:var(--text-mute);font-size:11px">${s.widgets} flux · ${s.articles} art.</div>
+            <div style="min-width:34px;text-align:right;font-weight:500;color:${s.unread>0?'var(--accent)':'var(--text-mute)'}">${s.unread}</div>
+          </div>`).join('')}
+      </div>
+      ${topKw.length && topKw[0][1] > 0 ? `
+      <div style="margin-top:14px">
+        <div style="font-size:11px;font-weight:500;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Mots-clés les plus présents</div>
+        ${topKw.filter(([,n])=>n>0).map(([k,n]) => `
+          <div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px">
+            <div style="flex:1">${this.escape(k)}</div>
+            <div style="color:var(--text-mute)">${n} article(s)</div>
+          </div>`).join('')}
+      </div>` : ''}
+      <div class="mfooter"><button class="btn-p" onclick="S.closeModal()">Fermer</button></div>`;
+    document.getElementById('ov').classList.add('on');
+  },
+
   // --- settings ------------------------------------------------------
   openSettings(){
     const publicUrl = window.location.origin + window.location.pathname + '?view=public';
+    const curTheme = localStorage.getItem(LS_THEME) || 'auto';
+    const curDensity = localStorage.getItem(LS_DENSITY) || 'normal';
     document.getElementById('modal-body').innerHTML = `
       <h3>Paramètres</h3>
+
       <div class="mrow" style="background:var(--bg-soft);padding:10px;border-radius:var(--radius)">
         <label style="font-weight:500;color:var(--text)">🔗 Partager ce dashboard en lecture seule</label>
         <p style="font-size:11px;color:var(--text-soft);margin:4px 0 6px">Envoie cette URL à qui tu veux. Les visiteurs verront ta configuration mais ne pourront rien modifier.</p>
         <input id="share-url" type="text" readonly value="${this.escape(publicUrl)}" onclick="this.select()" style="font-size:11px">
         <button class="btn-g" style="margin-top:6px;width:100%" onclick="S.copyShareLink()">Copier le lien</button>
       </div>
-      <div class="mrow"><label>URL du backend</label><input id="set-url" type="text" value="${this.escape(this.backendUrl||'')}" placeholder="https://…onrender.com"></div>
-      <div class="mrow"><label>Mots-clés d'alerte (un par ligne)</label><textarea id="set-kw">${this.escape(this.state.keywords.join('\n'))}</textarea></div>
-      <div class="mrow" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px">
-        <button class="btn-g" onclick="S.exportOPML()">Exporter OPML</button>
-        <button class="btn-g" onclick="S.importOPMLPrompt()">Importer OPML</button>
-        <button class="btn-g" onclick="S.exportJSON()">Export config</button>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;font-weight:500;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🎨 Apparence</div>
+        <div class="mrow"><label>Thème</label>
+          <div style="display:flex;gap:4px">
+            <button type="button" class="btn-g" data-tv="light" onclick="S.setTheme('light')" style="flex:1${curTheme==='light'?';background:var(--bg-soft);color:var(--text)':''}">☀ Clair</button>
+            <button type="button" class="btn-g" data-tv="dark" onclick="S.setTheme('dark')" style="flex:1${curTheme==='dark'?';background:var(--bg-soft);color:var(--text)':''}">🌙 Sombre</button>
+            <button type="button" class="btn-g" data-tv="auto" onclick="S.setTheme('auto')" style="flex:1${curTheme==='auto'?';background:var(--bg-soft);color:var(--text)':''}">💻 Auto</button>
+          </div>
+        </div>
+        <div class="mrow"><label>Densité</label>
+          <div style="display:flex;gap:4px">
+            <button type="button" class="btn-g" data-dv="compact" onclick="S.setDensity('compact')" style="flex:1${curDensity==='compact'?';background:var(--bg-soft);color:var(--text)':''}">Compact</button>
+            <button type="button" class="btn-g" data-dv="normal" onclick="S.setDensity('normal')" style="flex:1${curDensity==='normal'?';background:var(--bg-soft);color:var(--text)':''}">Normal</button>
+            <button type="button" class="btn-g" data-dv="comfortable" onclick="S.setDensity('comfortable')" style="flex:1${curDensity==='comfortable'?';background:var(--bg-soft);color:var(--text)':''}">Confortable</button>
+          </div>
+        </div>
       </div>
-      <div class="mrow" style="margin-top:16px">
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+        <div class="mrow"><label>URL du backend</label><input id="set-url" type="text" value="${this.escape(this.backendUrl||'')}" placeholder="https://…onrender.com"></div>
+        <div class="mrow"><label>Mots-clés d'alerte (un par ligne)</label><textarea id="set-kw">${this.escape(this.state.keywords.join('\n'))}</textarea></div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;font-weight:500;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Import / Export</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-g" onclick="S.exportOPML()">Exporter OPML</button>
+          <button class="btn-g" onclick="S.importOPMLPrompt()">Importer OPML</button>
+          <button class="btn-g" onclick="S.exportJSON()">Export config</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
         <button class="btn-g" style="color:#c94747" onclick="S.resetAll()">Réinitialiser tout</button>
       </div>
+
       <div class="mfooter">
-        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-g" onclick="S.closeModal()">Fermer</button>
         <button class="btn-p" onclick="S.saveSettings()">Enregistrer</button>
       </div>`;
     document.getElementById('ov').classList.add('on');
+  },
+
+  setTheme(v){
+    localStorage.setItem(LS_THEME, v);
+    if (v === 'auto') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', v);
+    // Rafraîchir la modale pour mettre à jour les boutons actifs
+    this.openSettings();
+    this.toast('Thème : ' + (v==='light'?'clair':v==='dark'?'sombre':'auto'));
+  },
+
+  setDensity(v){
+    localStorage.setItem(LS_DENSITY, v);
+    if (v === 'normal') document.documentElement.removeAttribute('data-density');
+    else document.documentElement.setAttribute('data-density', v);
+    this.openSettings();
+    this.toast('Densité : ' + v);
   },
 
   copyShareLink(){
@@ -1249,25 +1530,136 @@ ${feeds.map(w => `    <outline text="${this.escape(w.title)}" title="${this.esca
   },
 
   importOPMLPrompt(){
+    // Fermer la modale settings avant d'ouvrir le sélecteur de fichier
+    this.closeModal();
+    // Créer et attacher l'input au DOM (nécessaire sur certains navigateurs)
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.opml,.xml';
+    input.accept = '.opml,.xml,text/xml,text/x-opml';
+    input.style.position = 'fixed';
+    input.style.left = '-9999px';
+    document.body.appendChild(input);
     input.onchange = async (e) => {
       const file = e.target.files[0];
-      if (!file) return;
-      const text = await file.text();
-      this.importOPML(text);
+      if (!file) { document.body.removeChild(input); return; }
+      try {
+        const text = await file.text();
+        this.openOPMLImportChoice(text, file.name);
+      } catch(err) {
+        this.toast('Erreur de lecture du fichier');
+      }
+      document.body.removeChild(input);
     };
     input.click();
   },
 
-  importOPML(xml){
+  // Nouvelle : propose un choix entre import plat et hiérarchique
+  openOPMLImportChoice(xml, filename){
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'text/xml');
-    const outlines = doc.querySelectorAll('outline[xmlUrl]');
-    let n = 0;
+    // Détection d'erreurs de parsing XML
+    const parseError = doc.querySelector('parsererror');
+    if (parseError) {
+      this.toast('Fichier OPML invalide');
+      return;
+    }
+    // Compter les catégories et flux
+    const allFlux = doc.querySelectorAll('outline[xmlUrl]');
+    // Une catégorie = un outline SANS xmlUrl mais contenant des outlines avec xmlUrl
+    const categories = [];
+    doc.querySelectorAll('body > outline').forEach(o => {
+      if (!o.getAttribute('xmlUrl')) {
+        const children = o.querySelectorAll(':scope > outline[xmlUrl], :scope outline[xmlUrl]');
+        if (children.length > 0) {
+          categories.push({
+            name: o.getAttribute('text') || o.getAttribute('title') || 'Sans nom',
+            flux: Array.from(children)
+          });
+        }
+      }
+    });
+    if (allFlux.length === 0) {
+      this.toast('Aucun flux trouvé dans ce fichier');
+      return;
+    }
+    // Si aucune catégorie détectée, import direct plat
+    if (categories.length === 0) {
+      this.importOPMLFlat(allFlux);
+      return;
+    }
+    // Sinon, demander le mode
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Import OPML : ${this.escape(filename||'')}</h3>
+      <p style="font-size:12px;color:var(--text-soft);margin:8px 0 14px">Détecté : <strong>${allFlux.length} flux</strong> répartis dans <strong>${categories.length} catégorie(s)</strong>.</p>
+      <div class="mrow" style="background:var(--bg-soft);padding:10px;border-radius:var(--radius);cursor:pointer" onclick="S.doImportOPMLHierarchical()">
+        <label style="font-weight:500;color:var(--text);cursor:pointer">📁 Import hiérarchique (recommandé)</label>
+        <p style="font-size:11px;color:var(--text-soft);margin:4px 0 0">Chaque catégorie devient un nouvel onglet. Les ${categories.length} catégories créeront ${categories.length} onglets.</p>
+      </div>
+      <div class="mrow" style="background:var(--bg-soft);padding:10px;border-radius:var(--radius);cursor:pointer;margin-top:8px" onclick="S.doImportOPMLFlat()">
+        <label style="font-weight:500;color:var(--text);cursor:pointer">📄 Import plat</label>
+        <p style="font-size:11px;color:var(--text-soft);margin:4px 0 0">Tous les ${allFlux.length} flux dans l'onglet actif "${this.escape(this.state.tabs.find(t=>t.id===this.state.activeTab)?.label||'')}".</p>
+      </div>
+      <div class="mfooter">
+        <button class="btn-g" onclick="S.closeModal()">Annuler</button>
+      </div>`;
+    this._opmlCategories = categories;
+    this._opmlAllFlux = allFlux;
+    document.getElementById('ov').classList.add('on');
+  },
+
+  doImportOPMLHierarchical(){
+    const cats = this._opmlCategories;
+    if (!cats) return;
+    let totalFlux = 0;
+    const colors = ['#185FA5','#0F6E56','#854F0B','#A32D2D','#5F5E5A','#534AB7','#0F6E56','#A32D2D','#185FA5','#854F0B'];
+    cats.forEach((cat, ci) => {
+      const tabId = mkId();
+      this.state.tabs.push({
+        id: tabId,
+        label: cat.name.length > 40 ? cat.name.slice(0,40)+'…' : cat.name,
+        color: colors[ci % colors.length]
+      });
+      this.state.layouts[tabId] = cat.flux.length <= 2 ? '2' : cat.flux.length <= 6 ? '3' : '4';
+      const numCols = parseInt(this.state.layouts[tabId]);
+      const cols = [];
+      for (let i = 0; i < numCols; i++) cols.push({id:mkId(),widgets:[]});
+      this.state.columns[tabId] = cols;
+      cat.flux.forEach((o, fi) => {
+        const url = o.getAttribute('xmlUrl');
+        const title = o.getAttribute('title') || o.getAttribute('text') || url;
+        if (!url) return;
+        const id = mkId();
+        this.state.widgets[id] = {id,type:'rss',title,source:'rss',collapsed:false,url,items:[]};
+        cols[fi % numCols].widgets.push(id);
+        totalFlux++;
+        this.fetchFeed(id);
+      });
+    });
+    this._opmlCategories = null;
+    this._opmlAllFlux = null;
+    this.closeModal();
+    this.saveState();
+    this.render();
+    this.toast(`${cats.length} onglet(s) créé(s), ${totalFlux} flux importés`);
+  },
+
+  doImportOPMLFlat(){
+    const flux = this._opmlAllFlux;
+    if (!flux) return;
+    this.importOPMLFlat(flux);
+    this._opmlCategories = null;
+    this._opmlAllFlux = null;
+    this.closeModal();
+  },
+
+  importOPMLFlat(outlines){
     const cols = this.state.columns[this.state.activeTab] || [];
-    if (!cols.length) return this.toast('Pas de colonne disponible');
+    if (!cols.length) {
+      // Créer une colonne si aucune n'existe
+      cols.push({id:mkId(),widgets:[]});
+      this.state.columns[this.state.activeTab] = cols;
+    }
+    let n = 0;
     outlines.forEach((o, i) => {
       const url = o.getAttribute('xmlUrl');
       const title = o.getAttribute('title') || o.getAttribute('text') || url;
@@ -1281,7 +1673,7 @@ ${feeds.map(w => `    <outline text="${this.escape(w.title)}" title="${this.esca
     });
     this.saveState();
     this.render();
-    this.toast(n + ' flux importés');
+    this.toast(`${n} flux importés`);
   },
 
   exportJSON(){
