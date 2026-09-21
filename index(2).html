@@ -1,0 +1,3379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Veille</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   DESIGN SYSTEM — moderne, épuré, professionnel
+   ===================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Palette claire (par défaut) */
+  --bg: #fafaf9;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #f4f4f2;
+  --bg-hover: #eeeeec;
+  --bg-active: #e4e4e1;
+
+  --text: #1c1c1a;
+  --text-secondary: #52524e;
+  --text-tertiary: #8a8a83;
+
+  --border: rgba(28, 28, 26, 0.08);
+  --border-strong: rgba(28, 28, 26, 0.14);
+  --border-focus: rgba(28, 28, 26, 0.24);
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-subtle: rgba(37, 99, 235, 0.08);
+  --accent-text: #2563eb;
+
+  --success: #059669;
+  --success-subtle: rgba(5, 150, 105, 0.1);
+  --warning: #d97706;
+  --warning-subtle: rgba(217, 119, 6, 0.1);
+  --danger: #dc2626;
+  --danger-subtle: rgba(220, 38, 38, 0.08);
+  --pinned: #b45309;
+  --pinned-subtle: rgba(180, 83, 9, 0.1);
+
+  --shadow-xs: 0 1px 2px rgba(28, 28, 26, 0.04);
+  --shadow-sm: 0 1px 3px rgba(28, 28, 26, 0.06), 0 1px 2px rgba(28, 28, 26, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(28, 28, 26, 0.08), 0 2px 4px -2px rgba(28, 28, 26, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(28, 28, 26, 0.08), 0 4px 6px -4px rgba(28, 28, 26, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(28, 28, 26, 0.08), 0 8px 10px -6px rgba(28, 28, 26, 0.04);
+
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 120ms var(--easing);
+  --transition: 180ms var(--easing);
+
+  /* Densité normale */
+  --font-body: 13px;
+  --font-sm: 12px;
+  --font-xs: 11px;
+  --font-2xs: 10px;
+  --line-h: 1.5;
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --item-pad-y: 10px;
+  --item-pad-x: 14px;
+  --tab-pad-y: 9px;
+  --tab-pad-x: 14px;
+}
+
+/* Densité compacte */
+html[data-density="compact"] {
+  --font-body: 12px;
+  --font-sm: 11px;
+  --font-xs: 10px;
+  --font-2xs: 9px;
+  --line-h: 1.4;
+  --item-pad-y: 7px;
+  --item-pad-x: 11px;
+  --tab-pad-y: 6px;
+  --tab-pad-x: 11px;
+}
+
+/* Densité confortable */
+html[data-density="comfortable"] {
+  --font-body: 14px;
+  --font-sm: 13px;
+  --font-xs: 12px;
+  --font-2xs: 11px;
+  --line-h: 1.6;
+  --item-pad-y: 14px;
+  --item-pad-x: 18px;
+  --tab-pad-y: 11px;
+  --tab-pad-x: 16px;
+}
+
+/* Thème auto (suit le système) */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    --bg: #0f0f0e;
+    --bg-elevated: #1a1a18;
+    --bg-subtle: #232320;
+    --bg-hover: #2a2a27;
+    --bg-active: #34342f;
+
+    --text: #f1f1ed;
+    --text-secondary: #b4b4ac;
+    --text-tertiary: #7a7a72;
+
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --border-focus: rgba(255, 255, 255, 0.24);
+
+    --accent: #60a5fa;
+    --accent-hover: #93c5fd;
+    --accent-subtle: rgba(96, 165, 250, 0.1);
+    --accent-text: #60a5fa;
+
+    --success: #34d399;
+    --success-subtle: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-subtle: rgba(251, 191, 36, 0.12);
+    --danger: #f87171;
+    --danger-subtle: rgba(248, 113, 113, 0.1);
+    --pinned: #fbbf24;
+    --pinned-subtle: rgba(251, 191, 36, 0.12);
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* Thème sombre forcé */
+html[data-theme="dark"] {
+  --bg: #0f0f0e;
+  --bg-elevated: #1a1a18;
+  --bg-subtle: #232320;
+  --bg-hover: #2a2a27;
+  --bg-active: #34342f;
+  --text: #f1f1ed;
+  --text-secondary: #b4b4ac;
+  --text-tertiary: #7a7a72;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-focus: rgba(255, 255, 255, 0.24);
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-subtle: rgba(96, 165, 250, 0.1);
+  --accent-text: #60a5fa;
+  --success: #34d399;
+  --success-subtle: rgba(52, 211, 153, 0.12);
+  --warning: #fbbf24;
+  --warning-subtle: rgba(251, 191, 36, 0.12);
+  --danger: #f87171;
+  --danger-subtle: rgba(248, 113, 113, 0.1);
+  --pinned: #fbbf24;
+  --pinned-subtle: rgba(251, 191, 36, 0.12);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+html, body { height: 100%; }
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-body);
+  line-height: var(--line-h);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+
+/* Scrollbars raffinées */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-focus); }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* =====================================================================
+   LAYOUT PRINCIPAL
+   ===================================================================== */
+
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+/* =====================================================================
+   TOPBAR
+   ===================================================================== */
+
+.topbar {
+  height: 52px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-5);
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.brand-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.brand-tag {
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+}
+
+.backend-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+
+.backend-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+.backend-status.ok .dot { background: var(--success); box-shadow: 0 0 0 2px var(--success-subtle); }
+.backend-status.err .dot { background: var(--danger); box-shadow: 0 0 0 2px var(--danger-subtle); }
+
+.searchbar {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+}
+
+.searchbar input {
+  width: 100%;
+  padding: 7px 10px 7px 32px;
+  font-size: var(--font-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+  color: var(--text);
+  transition: all var(--transition-fast);
+}
+.searchbar input::placeholder { color: var(--text-tertiary); }
+.searchbar input:focus {
+  outline: none;
+  background: var(--bg-elevated);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
+.searchbar svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--bg-subtle);
+  padding: 2px;
+  border-radius: var(--radius);
+}
+
+.view-btn {
+  padding: 5px 10px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.view-btn:hover { color: var(--text-secondary); }
+.view-btn.active {
+  background: var(--bg-elevated);
+  color: var(--text);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+.btn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.btn svg { width: 12px; height: 12px; }
+
+.btn-icon {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  justify-content: center;
+}
+
+.public-banner {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-2xs);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  background: var(--success-subtle);
+  color: var(--success);
+  border-radius: 20px;
+  font-weight: 500;
+}
+.public-banner .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+/* =====================================================================
+   TABBAR
+   ===================================================================== */
+
+.tabbar {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: stretch;
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+  z-index: 19;
+  gap: 2px;
+}
+.tabbar::-webkit-scrollbar { display: none; }
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: var(--tab-pad-y) var(--tab-pad-x);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+.tab:hover { color: var(--text-secondary); background: var(--bg-subtle); }
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+.tab.drag-over { background: var(--accent-subtle); }
+.tab.reorder-drop-before::before {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+.tab.reorder-drop-after::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.tab-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tab-star {
+  color: var(--pinned);
+  font-size: 11px;
+  line-height: 1;
+}
+
+.tab-unread {
+  font-size: var(--font-2xs);
+  font-weight: 600;
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.tab-menu-btn {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  color: var(--text-tertiary);
+  font-size: 10px;
+  padding: 2px 4px;
+}
+.tab:hover .tab-menu-btn, .tab.active .tab-menu-btn { opacity: 1; }
+.tab-menu-btn:hover { color: var(--text); }
+
+.tab-add {
+  padding: var(--tab-pad-y) 12px;
+  font-size: 16px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: all var(--transition-fast);
+}
+.tab-add:hover { color: var(--text); background: var(--bg-subtle); }
+
+/* =====================================================================
+   TOOLBAR (colonnes + filtres)
+   ===================================================================== */
+
+.toolbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 8px var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.toolbar-label {
+  font-size: var(--font-2xs);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+}
+
+.layout-btn {
+  padding: 4px 9px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.layout-btn:hover { color: var(--text-secondary); background: var(--bg-subtle); }
+.layout-btn.active {
+  background: var(--bg-elevated);
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: var(--shadow-xs);
+}
+
+.filter-pill {
+  padding: 4px 11px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.filter-pill:hover { border-color: var(--border-strong); }
+.filter-pill.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.sync-status {
+  margin-left: auto;
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* =====================================================================
+   CANVAS
+   ===================================================================== */
+
+.canvas {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  position: relative;
+}
+
+.col-layout {
+  display: grid;
+  gap: var(--space-3);
+}
+.col-layout[data-cols="1"] { grid-template-columns: 1fr; }
+.col-layout[data-cols="2"] { grid-template-columns: 1fr 1fr; }
+.col-layout[data-cols="3"] { grid-template-columns: 1fr 1fr 1fr; }
+.col-layout[data-cols="4"] { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.col-layout[data-cols="2L"] { grid-template-columns: 2fr 1fr; }
+.col-layout[data-cols="2R"] { grid-template-columns: 1fr 2fr; }
+
+@media (max-width: 780px) {
+  .col-layout { grid-template-columns: 1fr !important; }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 240px;
+  padding: 4px;
+  border-radius: var(--radius-lg);
+  border: 2px dashed transparent;
+  transition: all var(--transition);
+}
+.column.drop-target {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+}
+
+.empty-col {
+  padding: 24px;
+  text-align: center;
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* =====================================================================
+   WIDGET
+   ===================================================================== */
+
+.widget {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-xs);
+}
+.widget:hover { box-shadow: var(--shadow-sm); }
+.widget.dragging { opacity: 0.4; }
+
+.widget-header {
+  padding: 10px var(--space-4);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+  transition: background var(--transition-fast);
+}
+.widget-header:hover { background: var(--bg-subtle); }
+.widget-header:active { cursor: grabbing; }
+
+.widget-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.widget-title {
+  font-size: var(--font-sm);
+  font-weight: 600;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.widget-meta {
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.widget-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.widget-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-size: 11px;
+}
+.widget-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+.widget-body {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.widget.collapsed .widget-body { display: none; }
+
+/* =====================================================================
+   FEED ITEMS
+   ===================================================================== */
+
+.feed-item {
+  display: block;
+  padding: var(--item-pad-y) var(--item-pad-x);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+}
+.feed-item:last-child { border-bottom: none; }
+.feed-item:hover { background: var(--bg-subtle); }
+.feed-item.unread { }
+.feed-item.unread::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.feed-item.unread .feed-title { font-weight: 600; }
+
+.feed-source {
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  margin-bottom: 3px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-weight: 500;
+}
+
+.feed-title {
+  font-size: var(--font-sm);
+  line-height: 1.45;
+  color: var(--text);
+  font-weight: 400;
+}
+
+.feed-time {
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  margin-top: 3px;
+}
+
+.badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.badge-alert { background: var(--danger-subtle); color: var(--danger); }
+.badge-pinned { background: var(--pinned-subtle); color: var(--pinned); }
+.badge-tag { background: var(--accent-subtle); color: var(--accent-text); text-transform: none; letter-spacing: 0; }
+.badge-later { background: var(--warning-subtle); color: var(--warning); }
+
+/* =====================================================================
+   MOSAIC / READER LIST VIEWS
+   ===================================================================== */
+
+.mosaic-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+.mosaic-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-xs);
+}
+.mosaic-card:hover {
+  background: var(--bg-subtle);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.reader-list {
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+/* =====================================================================
+   READER (article overlay)
+   ===================================================================== */
+
+.reader {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: var(--bg-elevated);
+  flex-direction: column;
+}
+.reader.on { display: flex; }
+
+.reader-bar {
+  padding: 12px var(--space-5);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  background: var(--bg-elevated);
+}
+
+.reader-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px var(--space-5);
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.reader-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.reader-meta {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.reader-content {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+.reader-content p { margin-bottom: 1em; }
+
+.reader-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Note area on article */
+.reader-note {
+  margin-top: 20px;
+  padding: 14px 16px;
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+.reader-note-label {
+  font-size: var(--font-2xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.reader-note textarea {
+  width: 100%;
+  min-height: 60px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.55;
+  resize: vertical;
+}
+.reader-note textarea:focus { outline: none; }
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+  font-size: var(--font-2xs);
+  font-weight: 500;
+  border-radius: 20px;
+}
+.tag-chip .rm { cursor: pointer; opacity: 0.6; margin-left: 2px; }
+.tag-chip .rm:hover { opacity: 1; }
+
+/* =====================================================================
+   MODAL / OVERLAY
+   ===================================================================== */
+
+.overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 60;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.overlay.on { display: flex; }
+
+.modal {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  width: 420px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+
+.modal h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.form-row { margin-top: 12px; }
+.form-row label {
+  display: block;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.form-row input[type="text"],
+.form-row input[type="url"],
+.form-row input[type="email"],
+.form-row select,
+.form-row textarea {
+  width: 100%;
+  padding: 8px 11px;
+  font-size: var(--font-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+  color: var(--text);
+  transition: all var(--transition-fast);
+}
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+  outline: none;
+  background: var(--bg-elevated);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+.form-row textarea { min-height: 80px; resize: vertical; }
+
+.form-row input[type="color"] {
+  width: 100%;
+  height: 42px;
+  padding: 3px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-subtle);
+}
+
+.modal-section {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.modal-section-title {
+  font-size: var(--font-2xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  padding: 8px 14px;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-ghost {
+  padding: 8px 14px;
+  font-size: var(--font-sm);
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-ghost:hover { background: var(--bg-hover); color: var(--text); }
+.btn-danger { color: var(--danger); }
+.btn-danger:hover { background: var(--danger-subtle); color: var(--danger); }
+
+.share-card {
+  background: linear-gradient(135deg, var(--accent-subtle), transparent);
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Segmented control (thème, densité) */
+.segmented {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius);
+}
+.segmented-btn {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.segmented-btn:hover { color: var(--text-secondary); }
+.segmented-btn.active {
+  background: var(--bg-elevated);
+  color: var(--text);
+  box-shadow: var(--shadow-xs);
+}
+
+.color-suggestions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-elevated);
+  outline: 1px solid var(--border);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+.color-swatch:hover { transform: scale(1.15); }
+
+/* =====================================================================
+   CONTEXT MENU
+   ===================================================================== */
+
+.ctx-menu {
+  display: none;
+  position: absolute;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  z-index: 200;
+  min-width: 190px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  padding: 4px;
+}
+.ctx-item {
+  padding: 7px 11px;
+  font-size: var(--font-sm);
+  cursor: pointer;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background var(--transition-fast);
+}
+.ctx-item:hover { background: var(--bg-hover); }
+.ctx-sep { height: 1px; background: var(--border); margin: 4px 0; }
+.ctx-item.danger { color: var(--danger); }
+
+/* =====================================================================
+   SETUP SCREEN
+   ===================================================================== */
+
+.setup {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+.setup.on { display: flex; }
+.setup-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+.setup-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+.setup-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* =====================================================================
+   TOAST
+   ===================================================================== */
+
+.toast {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: var(--text);
+  color: var(--bg);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  opacity: 0;
+  transition: opacity 200ms ease, transform 200ms ease;
+  transform: translateY(8px);
+  pointer-events: none;
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+}
+.toast.on { opacity: 1; transform: translateY(0); }
+
+/* =====================================================================
+   LIBRARY (Bibliothèque)
+   ===================================================================== */
+
+.library {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  background: var(--bg);
+  flex-direction: column;
+}
+.library.on { display: flex; }
+
+.library-header {
+  padding: 12px var(--space-5);
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+.library-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.library-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+.library-sidebar {
+  width: 240px;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: var(--space-4);
+  flex-shrink: 0;
+}
+.library-sidebar-section {
+  margin-bottom: 20px;
+}
+.library-sidebar-title {
+  font-size: var(--font-2xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  padding: 0 8px;
+}
+.lib-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  margin-bottom: 1px;
+}
+.lib-nav-item:hover { background: var(--bg-hover); color: var(--text); }
+.lib-nav-item.active {
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+  font-weight: 500;
+}
+.lib-nav-count {
+  margin-left: auto;
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+.lib-nav-item.active .lib-nav-count { color: var(--accent-text); }
+
+.library-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+}
+.library-content-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.library-content-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  flex: 1;
+}
+.library-count {
+  font-size: var(--font-xs);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.lib-search {
+  position: relative;
+  max-width: 260px;
+}
+.lib-search input {
+  width: 100%;
+  padding: 7px 10px 7px 32px;
+  font-size: var(--font-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+.lib-search svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+}
+
+.lib-article-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lib-article {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.lib-article:hover { box-shadow: var(--shadow-sm); border-color: var(--border-strong); }
+.lib-article-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: var(--font-2xs);
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+.lib-article-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.lib-article-note {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border);
+  font-style: italic;
+}
+.lib-article-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.lib-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-tertiary);
+}
+.lib-empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+.lib-empty h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.lib-empty p { font-size: var(--font-sm); max-width: 320px; margin: 0 auto; }
+
+/* Batch selection */
+.batch-bar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  margin-bottom: var(--space-4);
+  align-items: center;
+  gap: var(--space-3);
+}
+.batch-bar.on { display: flex; }
+.batch-btn {
+  padding: 5px 10px;
+  font-size: var(--font-xs);
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--bg);
+  cursor: pointer;
+}
+.batch-btn:hover { background: rgba(255,255,255,0.1); }
+
+.reader-list .feed-item.selectable { padding-left: 40px; }
+.reader-list .feed-item .sel-check {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  z-index: 2;
+}
+.reader-list .feed-item.selected { background: var(--accent-subtle); }
+
+/* =====================================================================
+   PUBLIC MODE
+   ===================================================================== */
+
+body.public-mode .public-hide { display: none !important; }
+body.public-mode .tab-menu-btn { display: none !important; }
+body.public-mode .tab-add { display: none !important; }
+body.public-mode .widget-header { cursor: default !important; }
+body.public-mode .column { border: none !important; }
+body.public-mode .empty-col { display: none !important; }
+body.public-mode .sync-status { display: none !important; }
+body.public-mode .public-banner { display: inline-flex !important; }
+body.public-mode .filter-pill[data-f="saved"], body.public-mode .filter-pill[data-f="alert"] { display: none !important; }
+
+/* =====================================================================
+   ICON UTILITIES
+   ===================================================================== */
+
+.icon { width: 14px; height: 14px; flex-shrink: 0; }
+.icon-sm { width: 12px; height: 12px; }
+.icon-lg { width: 16px; height: 16px; }
+
+/* Spinner */
+.spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .topbar { padding: 0 12px; gap: 6px; }
+  .brand-tag { display: none; }
+  .searchbar { max-width: 180px; }
+  .backend-status { display: none; }
+  .library-sidebar { width: 200px; }
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- SETUP SCREEN -->
+  <div class="setup" id="setup">
+    <div class="setup-card">
+      <h2>Configuration</h2>
+      <p>Le portail a besoin de l'URL de ton backend Render pour récupérer les flux RSS et sauvegarder ta configuration.</p>
+      <div class="form-row">
+        <label>URL du backend</label>
+        <input id="setup-url" type="url" placeholder="https://veille-backend-xxxx.onrender.com">
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.skipSetup()">Passer</button>
+        <button class="btn-primary" onclick="S.saveBackend()">Continuer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon">V</div>
+      <span>Veille</span>
+      <span class="brand-tag">v4</span>
+    </div>
+
+    <div class="backend-status" id="backend-status">
+      <span class="dot"></span>
+      <span id="bs-label">…</span>
+    </div>
+
+    <div class="searchbar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Rechercher…" oninput="S.search(this.value)">
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn active" id="vt-widget" onclick="S.setView('widget')">Widgets</button>
+      <button class="view-btn" id="vt-reader" onclick="S.setView('reader-list')">Lecteur</button>
+      <button class="view-btn" id="vt-mosaic" onclick="S.setView('mosaic')">Mosaïque</button>
+    </div>
+
+    <button class="btn btn-icon" onclick="S.refreshAll()" title="Rafraîchir tous les flux">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+    </button>
+    <button class="btn public-hide" onclick="S.openAddWidget()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      Flux
+    </button>
+    <button class="btn btn-icon" onclick="S.openLibrary()" title="Bibliothèque">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+    </button>
+    <button class="btn btn-icon" onclick="S.openDashboard()" title="Tableau de bord">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+    </button>
+    <button class="btn btn-icon public-hide" onclick="S.openSettings()" title="Paramètres">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="public-banner" id="public-banner"><span class="dot"></span>Lecture seule</div>
+  </div>
+
+  <!-- TABBAR -->
+  <div class="tabbar" id="tabbar"></div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <span class="toolbar-label">Colonnes</span>
+    <button class="layout-btn" data-lc="1" onclick="S.setLayout('1')">1</button>
+    <button class="layout-btn" data-lc="2" onclick="S.setLayout('2')">2</button>
+    <button class="layout-btn" data-lc="3" onclick="S.setLayout('3')">3</button>
+    <button class="layout-btn" data-lc="4" onclick="S.setLayout('4')">4</button>
+    <button class="layout-btn" data-lc="2L" onclick="S.setLayout('2L')">2L</button>
+    <button class="layout-btn" data-lc="2R" onclick="S.setLayout('2R')">2R</button>
+    <div class="toolbar-divider"></div>
+    <span class="toolbar-label">Filtrer</span>
+    <button class="filter-pill active" data-f="all" onclick="S.setFilter('all')">Tout</button>
+    <button class="filter-pill" data-f="unread" onclick="S.setFilter('unread')">Non lus</button>
+    <button class="filter-pill" data-f="saved" onclick="S.setFilter('saved')">Épinglés</button>
+    <button class="filter-pill" data-f="later" onclick="S.setFilter('later')">À lire plus tard</button>
+    <button class="filter-pill" data-f="alert" onclick="S.setFilter('alert')">Alertes</button>
+    <div class="sync-status" id="sync-status"><span id="sync-text"></span></div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="canvas" id="canvas"></div>
+
+  <!-- READER (article) -->
+  <div class="reader" id="reader">
+    <div class="reader-bar">
+      <button class="btn-ghost" onclick="S.closeReader()">← Retour</button>
+      <span id="reader-source" style="font-size:var(--font-xs);color:var(--text-secondary);font-weight:500"></span>
+      <div style="flex:1"></div>
+      <button class="btn public-hide" id="pin-btn" onclick="S.pinCurrentArticle()">Épingler</button>
+      <button class="btn public-hide" id="later-btn" onclick="S.laterCurrentArticle()">Plus tard</button>
+    </div>
+    <div class="reader-body">
+      <div class="reader-title" id="reader-title"></div>
+      <div class="reader-meta" id="reader-meta"></div>
+      <div class="reader-content" id="reader-content"></div>
+      <div class="reader-actions" id="reader-actions"></div>
+      <div class="public-hide" id="reader-annotation"></div>
+    </div>
+  </div>
+
+  <!-- LIBRARY -->
+  <div class="library" id="library">
+    <div class="library-header">
+      <div class="library-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+        Bibliothèque
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn-ghost" onclick="S.closeLibrary()">Fermer</button>
+    </div>
+    <div class="library-main">
+      <div class="library-sidebar" id="library-sidebar"></div>
+      <div class="library-content" id="library-content"></div>
+    </div>
+  </div>
+
+  <!-- Modal / context menu / toast -->
+  <div class="overlay" id="overlay"><div class="modal" id="modal-body"></div></div>
+  <div class="ctx-menu" id="ctx-menu"></div>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+// =====================================================================
+//  CONSTANTS
+// =====================================================================
+
+const LS_BACKEND = 'veille_backend_url';
+const LS_STATE = 'veille_state_v4';
+const LS_THEME = 'veille_theme';
+const LS_DENSITY = 'veille_density';
+
+const IS_PUBLIC = new URLSearchParams(window.location.search).get('view') === 'public';
+const PUBLIC_BACKEND_URL = 'https://veille-backend-160e.onrender.com';
+
+// Appliquer thème/densité au chargement
+(function() {
+  const theme = localStorage.getItem(LS_THEME) || 'auto';
+  const density = localStorage.getItem(LS_DENSITY) || 'normal';
+  if (theme !== 'auto') document.documentElement.setAttribute('data-theme', theme);
+  if (density !== 'normal') document.documentElement.setAttribute('data-density', density);
+})();
+
+const COLORS = {
+  rss:'#2563eb', social:'#059669', email:'#b45309', youtube:'#dc2626', generic:'#6b7280'
+};
+const BGS = {
+  rss:'rgba(37,99,235,0.1)', social:'rgba(5,150,105,0.1)', email:'rgba(180,83,9,0.1)',
+  youtube:'rgba(220,38,38,0.1)', generic:'rgba(107,114,128,0.1)'
+};
+const ICONS = { rss:'◈', social:'◉', email:'✉', youtube:'▶', stats:'◫' };
+
+function mkId() { return 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+// =====================================================================
+//  DEFAULT STATE
+// =====================================================================
+
+function makeDefaultState() {
+  return {
+    tabs: [
+      { id: 't1', label: 'Tech & IA',    color: '#2563eb' },
+      { id: 't2', label: 'Actualités',   color: '#059669' },
+      { id: 't3', label: 'Économie',     color: '#b45309' },
+    ],
+    activeTab: 't1',
+    filter: 'all',
+    view: 'widget',
+    searchQ: '',
+    saved: [],
+    readIds: [],
+    later: [],
+    keywords: ['IA', 'LLM', 'open source'],
+    layouts: { t1: '3', t2: '2', t3: '2' },
+    columns: {
+      t1: [{ id: mkId(), widgets: [] }, { id: mkId(), widgets: [] }, { id: mkId(), widgets: [] }],
+      t2: [{ id: mkId(), widgets: [] }, { id: mkId(), widgets: [] }],
+      t3: [{ id: mkId(), widgets: [] }, { id: mkId(), widgets: [] }],
+    },
+    widgets: {},
+    // Library data
+    library: {}, // { articleId: { title, link, src, pubDate, summary, savedAt, note, tags:[] } }
+    tags: [], // liste des tags existants
+    history: [] // { articleId, title, src, link, readAt }
+  };
+}
+
+const DEMO_FEEDS = [
+  { title: 'Le Monde — Une', url: 'https://www.lemonde.fr/rss/une.xml', tab: 't1' },
+  { title: 'Hacker News', url: 'https://hnrss.org/frontpage', tab: 't1' },
+  { title: 'Numerama', url: 'https://www.numerama.com/feed/', tab: 't1' },
+  { title: 'France Info', url: 'https://www.francetvinfo.fr/titres.rss', tab: 't2' },
+  { title: 'Les Échos', url: 'https://services.lesechos.fr/rss/les-echos-economie-france.xml', tab: 't3' },
+];
+
+// =====================================================================
+//  STATE MANAGER
+// =====================================================================
+
+const S = {
+  state: null,
+  backendUrl: null,
+  dragWidget: null,
+  dragFromCol: null,
+  dragFromTab: null,
+  dragTabId: null,
+  curArt: null,
+  toastTimer: null,
+  loading: new Set(),
+
+  // Library UI state (not persisted)
+  libraryFilter: 'all',      // all | tag:X | later
+  libraryTagFilter: null,
+  librarySearchQ: '',
+  librarySelected: new Set(),
+
+  // ===================================================================
+  //  INIT
+  // ===================================================================
+
+  async init() {
+    if (IS_PUBLIC) {
+      this.backendUrl = PUBLIC_BACKEND_URL;
+      document.body.classList.add('public-mode');
+      await this.startAppPublic();
+      return;
+    }
+    this.backendUrl = localStorage.getItem(LS_BACKEND);
+    if (!this.backendUrl) this.showSetup();
+    else this.startApp();
+  },
+
+  showSetup() { document.getElementById('setup').classList.add('on'); },
+
+  skipSetup() {
+    this.backendUrl = null;
+    document.getElementById('setup').classList.remove('on');
+    this.startApp();
+  },
+
+  saveBackend() {
+    let url = document.getElementById('setup-url').value.trim();
+    if (!url) return;
+    if (url.endsWith('/')) url = url.slice(0, -1);
+    localStorage.setItem(LS_BACKEND, url);
+    this.backendUrl = url;
+    document.getElementById('setup').classList.remove('on');
+    this.startApp();
+  },
+
+  async startApp() {
+    this.loadState();
+    this.render();
+    if (this.backendUrl) {
+      await this.checkBackend();
+      this.preloadDemoFeeds();
+      this.refreshAll();
+    } else {
+      this.setBackendStatus('off', 'Offline');
+    }
+  },
+
+  async startAppPublic() {
+    this.state = makeDefaultState();
+    this.render();
+    await this.checkBackend();
+    try {
+      const r = await fetch(this.backendUrl + '/api/state');
+      if (r.ok) {
+        const data = await r.json();
+        if (data && data.state) {
+          this.state = data.state;
+          this.state.saved = [];
+          this.state.readIds = [];
+          this.state.later = [];
+          this.state.filter = 'all';
+          this.state.searchQ = '';
+        }
+      }
+    } catch(e) {}
+    this.render();
+    this.refreshAll();
+    setInterval(async () => {
+      try {
+        const r = await fetch(this.backendUrl + '/api/state');
+        if (r.ok) {
+          const data = await r.json();
+          if (data && data.state) {
+            const cur = this.state.activeTab;
+            this.state = data.state;
+            this.state.saved = [];
+            this.state.readIds = [];
+            this.state.later = [];
+            if (this.state.tabs.some(t => t.id === cur)) this.state.activeTab = cur;
+            this.render();
+            this.refreshAll();
+          }
+        }
+      } catch(e) {}
+    }, 5 * 60 * 1000);
+  },
+
+  // ===================================================================
+  //  STATE PERSISTENCE
+  // ===================================================================
+
+  loadState() {
+    try {
+      const raw = localStorage.getItem(LS_STATE);
+      // Compatibilité rétro v2 → v4
+      const rawOld = localStorage.getItem('veille_state_v2');
+      if (!raw && rawOld) {
+        this.state = JSON.parse(rawOld);
+      } else {
+        this.state = raw ? JSON.parse(raw) : makeDefaultState();
+      }
+    } catch(e) {
+      this.state = makeDefaultState();
+    }
+    // Garantir structure
+    const defaults = makeDefaultState();
+    for (const k of Object.keys(defaults)) {
+      if (this.state[k] === undefined) this.state[k] = defaults[k];
+    }
+  },
+
+  saveState() {
+    if (IS_PUBLIC) return;
+    try {
+      localStorage.setItem(LS_STATE, JSON.stringify(this.state));
+      this.setSync('saved');
+    } catch(e) {
+      this.setSync('error');
+    }
+    if (this.backendUrl) this.syncToBackend();
+  },
+
+  async syncToBackend() {
+    try {
+      await fetch(this.backendUrl + '/api/state', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.state)
+      });
+    } catch(e) {}
+  },
+
+  setSync(mode) {
+    const el = document.getElementById('sync-text');
+    if (!el) return;
+    if (mode === 'saved') { el.textContent = '● Sauvegardé'; el.style.color = 'var(--success)'; }
+    else if (mode === 'error') { el.textContent = '⚠ Erreur'; el.style.color = 'var(--danger)'; }
+  },
+
+  // ===================================================================
+  //  BACKEND
+  // ===================================================================
+
+  async checkBackend() {
+    if (!this.backendUrl) return false;
+    this.setBackendStatus('checking', 'Vérification…');
+    try {
+      const r = await fetch(this.backendUrl + '/api/health');
+      if (r.ok) { this.setBackendStatus('ok', 'Backend OK'); return true; }
+      this.setBackendStatus('err', 'Backend HS');
+    } catch(e) {
+      this.setBackendStatus('err', 'Injoignable');
+    }
+    return false;
+  },
+
+  setBackendStatus(mode, label) {
+    const el = document.getElementById('backend-status');
+    const lbl = document.getElementById('bs-label');
+    if (!el || !lbl) return;
+    el.classList.remove('ok', 'err');
+    if (mode === 'ok') el.classList.add('ok');
+    else if (mode === 'err') el.classList.add('err');
+    lbl.textContent = label;
+  },
+
+  // ===================================================================
+  //  DEMO FEEDS
+  // ===================================================================
+
+  preloadDemoFeeds() {
+    if (Object.keys(this.state.widgets).length > 0) return;
+    DEMO_FEEDS.forEach((f, i) => {
+      const id = mkId();
+      this.state.widgets[id] = { id, type: 'rss', title: f.title, source: 'rss', collapsed: false, url: f.url, items: [] };
+      const cols = this.state.columns[f.tab] || this.state.columns[this.state.activeTab];
+      const col = cols[i % cols.length];
+      col.widgets.push(id);
+    });
+    this.saveState();
+    this.render();
+  },
+
+  // ===================================================================
+  //  RSS FETCHING
+  // ===================================================================
+
+  async fetchFeed(widgetId) {
+    const w = this.state.widgets[widgetId];
+    if (!w || !w.url || !this.backendUrl) return;
+    this.loading.add(widgetId);
+    this.updateWidget(widgetId);
+    try {
+      const url = this.backendUrl + '/api/rss?url=' + encodeURIComponent(w.url);
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const data = await r.json();
+      w.items = (data.items || []).map(it => ({
+        id: it.id || it.link || mkId(),
+        title: it.title || '(sans titre)',
+        link: it.link || '',
+        time: this.formatTime(it.pubDate),
+        pubDate: it.pubDate,
+        summary: it.summary || '',
+        src: data.title || w.title,
+        unread: !this.state.readIds.includes(it.id || it.link),
+        alert: this.isAlert(it.title + ' ' + (it.summary || ''))
+      }));
+    } catch(e) {
+      w.items = [{ id: mkId(), title: 'Erreur : ' + e.message, time: '', src: w.title, unread: false, alert: false, error: true }];
+    }
+    this.loading.delete(widgetId);
+    this.updateWidget(widgetId);
+    this.saveState();
+  },
+
+  async refreshAll() {
+    const widgets = Object.values(this.state.widgets).filter(w => w.type === 'rss' && w.url);
+    if (!widgets.length || !this.backendUrl) return;
+    this.toast('Rafraîchissement de ' + widgets.length + ' flux…');
+    await Promise.all(widgets.map(w => this.fetchFeed(w.id)));
+    this.renderTabs();
+    this.toast('Flux mis à jour');
+  },
+
+  isAlert(text) {
+    if (!text) return false;
+    const t = text.toLowerCase();
+    return this.state.keywords.some(k => t.includes(k.toLowerCase()));
+  },
+
+  formatTime(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    const diff = (Date.now() - d.getTime()) / 1000;
+    if (diff < 60) return "à l'instant";
+    if (diff < 3600) return Math.floor(diff / 60) + ' min';
+    if (diff < 86400) return Math.floor(diff / 3600) + ' h';
+    if (diff < 604800) return Math.floor(diff / 86400) + ' j';
+    return d.toLocaleDateString('fr-FR');
+  },
+
+  // ===================================================================
+  //  RENDER
+  // ===================================================================
+
+  render() {
+    this.renderTabs();
+    this.renderToolbar();
+    this.renderCanvas();
+  },
+
+  renderTabs() {
+    const bar = document.getElementById('tabbar');
+    const unreadByTab = {};
+    this.state.tabs.forEach(t => {
+      const cols = this.state.columns[t.id] || [];
+      let n = 0;
+      cols.forEach(c => c.widgets.forEach(wid => {
+        const w = this.state.widgets[wid];
+        if (w && w.items) n += w.items.filter(i => i.unread).length;
+      }));
+      unreadByTab[t.id] = n;
+    });
+
+    const pinned = this.state.tabs.filter(t => t.pinned);
+    const others = this.state.tabs.filter(t => !t.pinned);
+    const ordered = [...pinned, ...others];
+
+    bar.innerHTML = ordered.map(t => {
+      const draggable = !IS_PUBLIC && !t.pinned;
+      const dragAttr = draggable ? 'draggable="true"' : '';
+      const dropHandlers = IS_PUBLIC ? '' :
+        `ondragstart="S.tabDragStart(event,'${t.id}')" ` +
+        `ondragend="S.tabDragEnd(event)" ` +
+        `ondragover="S.tabDragOver(event,'${t.id}')" ` +
+        `ondragleave="S.tabDragLeave('${t.id}')" ` +
+        `ondrop="S.tabDrop(event,'${t.id}')"`;
+      return `<div class="tab${t.id === this.state.activeTab ? ' active' : ''}" data-tid="${t.id}" ${dragAttr} onclick="S.switchTab('${t.id}')" ${dropHandlers}>
+        ${t.pinned ? '<span class="tab-star" title="Onglet épinglé">★</span>' : ''}
+        <div class="tab-pip" style="background:${t.color}"></div>
+        ${this.escape(t.label)}
+        ${unreadByTab[t.id] ? `<span class="tab-unread">${unreadByTab[t.id]}</span>` : ''}
+        <span class="tab-menu-btn" onclick="event.stopPropagation();S.openTabMenu('${t.id}',event)">▾</span>
+      </div>`;
+    }).join('') + `<button class="tab-add public-hide" onclick="S.openAddTab()" title="Nouvel onglet">+</button>`;
+  },
+
+  renderToolbar() {
+    const lc = this.state.layouts[this.state.activeTab] || '3';
+    document.querySelectorAll('.layout-btn').forEach(b => b.classList.toggle('active', b.dataset.lc === lc));
+    document.querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b.dataset.f === this.state.filter));
+    ['widget', 'reader-list', 'mosaic'].forEach(v => {
+      const el = document.getElementById('vt-' + v);
+      if (el) el.classList.toggle('active', this.state.view === v);
+    });
+  },
+
+  renderCanvas() {
+    const canvas = document.getElementById('canvas');
+    const tab = this.state.activeTab;
+    const layout = this.state.layouts[tab] || '3';
+    const numCols = parseInt(layout) || (layout === '2L' || layout === '2R' ? 2 : 3);
+
+    if (!this.state.columns[tab]) this.state.columns[tab] = [];
+    const cols = this.state.columns[tab];
+    while (cols.length < numCols) cols.push({ id: mkId(), widgets: [] });
+    if (cols.length > numCols) {
+      const extra = cols.splice(numCols);
+      extra.forEach(c => c.widgets.forEach(wid => cols[0].widgets.push(wid)));
+    }
+
+    if (this.state.view === 'mosaic') return this.renderMosaic(canvas);
+    if (this.state.view === 'reader-list') return this.renderReaderList(canvas);
+
+    canvas.innerHTML = `<div class="col-layout" data-cols="${layout}" id="col-layout"></div>`;
+    const cl = document.getElementById('col-layout');
+    cols.forEach((col, ci) => {
+      const div = document.createElement('div');
+      div.className = 'column';
+      div.dataset.colid = col.id;
+      div.ondragover = (e) => { e.preventDefault(); div.classList.add('drop-target'); };
+      div.ondragleave = () => div.classList.remove('drop-target');
+      div.ondrop = (e) => { e.preventDefault(); div.classList.remove('drop-target'); this.dropOnCol(col.id); };
+
+      let wids = col.widgets.slice();
+      if (this.state.searchQ) {
+        wids = wids.filter(wid => {
+          const w = this.state.widgets[wid];
+          if (!w) return false;
+          if (w.title.toLowerCase().includes(this.state.searchQ)) return true;
+          return (w.items || []).some(i => (i.title || '').toLowerCase().includes(this.state.searchQ));
+        });
+      }
+      if (wids.length === 0) {
+        div.innerHTML = `<div class="empty-col">Glissez un widget ici</div>`;
+      } else {
+        wids.forEach(wid => {
+          const w = this.state.widgets[wid];
+          if (w) div.appendChild(this.buildWidget(w, col.id));
+        });
+      }
+      cl.appendChild(div);
+    });
+  },
+
+  renderMosaic(canvas) {
+    const tab = this.state.activeTab;
+    const cols = this.state.columns[tab] || [];
+    let all = [];
+    cols.forEach(c => c.widgets.forEach(wid => {
+      const w = this.state.widgets[wid];
+      if (w && w.items) w.items.forEach(i => all.push({ ...i, wt: w.title }));
+    }));
+    all = this.applyFilter(all);
+    canvas.innerHTML = `<div class="mosaic-layout">${all.map(i => `
+      <div class="mosaic-card" onclick="S.openArticle('${i.id}')">
+        <div class="feed-source" style="margin-bottom:6px">${this.escape(i.src || i.wt || '')} · ${i.time || ''}</div>
+        <div style="font-size:13px;line-height:1.4;font-weight:500">${this.escape(i.title || '')}</div>
+      </div>`).join('') || '<div style="padding:60px;text-align:center;color:var(--text-tertiary);font-size:13px">Aucun article</div>'}</div>`;
+  },
+
+  renderReaderList(canvas) {
+    const tab = this.state.activeTab;
+    const cols = this.state.columns[tab] || [];
+    let all = [];
+    cols.forEach(c => c.widgets.forEach(wid => {
+      const w = this.state.widgets[wid];
+      if (w && w.items) w.items.forEach(i => all.push({ ...i, wt: w.title }));
+    }));
+    all = this.applyFilter(all).sort((a, b) => (new Date(b.pubDate || 0)) - (new Date(a.pubDate || 0)));
+
+    const selCount = this.librarySelected.size;
+    canvas.innerHTML = `
+      <div class="batch-bar ${selCount > 0 ? 'on' : ''}" id="batch-bar">
+        <span style="font-weight:500">${selCount} article(s) sélectionné(s)</span>
+        <div style="flex:1"></div>
+        <button class="batch-btn" onclick="S.batchAction('read')">Marquer lus</button>
+        <button class="batch-btn" onclick="S.batchAction('pin')">Épingler</button>
+        <button class="batch-btn" onclick="S.batchAction('later')">À lire plus tard</button>
+        <button class="batch-btn" onclick="S.batchAction('tag')">Taguer…</button>
+        <button class="batch-btn" onclick="S.batchClear()">Annuler</button>
+      </div>
+      <div class="reader-list">${all.map(i => {
+        const isSelected = this.librarySelected.has(i.id);
+        return `
+        <div class="feed-item selectable ${i.unread ? 'unread' : ''} ${isSelected ? 'selected' : ''}">
+          <input type="checkbox" class="sel-check public-hide" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation();S.toggleSelection('${i.id}')">
+          <div onclick="S.openArticle('${i.id}')">
+            <div class="feed-source">${this.escape(i.src || i.wt || '')} ${i.alert ? '<span class="badge badge-alert">alerte</span>' : ''} ${this.state.saved.includes(i.id) ? '<span class="badge badge-pinned">épinglé</span>' : ''} ${this.state.later.includes(i.id) ? '<span class="badge badge-later">plus tard</span>' : ''}</div>
+            <div class="feed-title">${this.escape(i.title || '')}</div>
+            <div class="feed-time">${i.time || ''}</div>
+          </div>
+        </div>`;
+      }).join('') || '<div style="padding:40px;text-align:center;color:var(--text-tertiary);font-size:13px">Aucun article</div>'}</div>`;
+  },
+
+  applyFilter(items) {
+    let r = items;
+    if (this.state.filter === 'unread') r = r.filter(i => i.unread);
+    if (this.state.filter === 'saved') r = r.filter(i => this.state.saved.includes(i.id));
+    if (this.state.filter === 'later') r = r.filter(i => this.state.later.includes(i.id));
+    if (this.state.filter === 'alert') r = r.filter(i => i.alert);
+    if (this.state.searchQ) r = r.filter(i => (i.title || '').toLowerCase().includes(this.state.searchQ));
+    return r;
+  },
+
+  buildWidget(w, colId) {
+    const div = document.createElement('div');
+    div.className = 'widget' + (w.collapsed ? ' collapsed' : '') + (this.loading.has(w.id) ? ' loading' : '');
+    div.dataset.wid = w.id;
+    if (!IS_PUBLIC) {
+      div.draggable = true;
+      div.ondragstart = (e) => {
+        this.dragWidget = w.id;
+        this.dragFromCol = colId;
+        this.dragFromTab = this.state.activeTab;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => div.classList.add('dragging'), 0);
+      };
+      div.ondragend = () => div.classList.remove('dragging');
+    }
+
+    const color = COLORS[w.source] || COLORS.generic;
+    const bg = BGS[w.source] || BGS.generic;
+    const icon = ICONS[w.type] || '◈';
+    const count = w.items ? w.items.filter(i => i.unread).length : 0;
+    const isLoading = this.loading.has(w.id);
+
+    let items = w.items || [];
+    if (this.state.filter === 'unread') items = items.filter(i => i.unread);
+    if (this.state.filter === 'saved') items = items.filter(i => this.state.saved.includes(i.id));
+    if (this.state.filter === 'later') items = items.filter(i => this.state.later.includes(i.id));
+    if (this.state.filter === 'alert') items = items.filter(i => i.alert);
+    if (this.state.searchQ) items = items.filter(i => (i.title || '').toLowerCase().includes(this.state.searchQ));
+
+    let body;
+    if (items.length === 0 && !isLoading) {
+      body = `<div style="padding:20px;font-size:var(--font-xs);color:var(--text-tertiary);text-align:center">${w.url ? 'Aucun article' : 'Widget vide'}</div>`;
+    } else if (isLoading && items.length === 0) {
+      body = `<div style="padding:24px;text-align:center"><span class="spinner"></span></div>`;
+    } else {
+      body = items.slice(0, 15).map(i => {
+        const pinned = this.state.saved.includes(i.id);
+        const later = this.state.later.includes(i.id);
+        return `<div class="feed-item ${i.unread ? 'unread' : ''}" onclick="S.openArticle('${i.id}')">
+          <div class="feed-source">${this.escape(i.src || '')} ${i.alert ? '<span class="badge badge-alert">alerte</span>' : ''} ${pinned ? '<span class="badge badge-pinned">★</span>' : ''} ${later ? '<span class="badge badge-later">⏱</span>' : ''}</div>
+          <div class="feed-title">${this.escape(i.title || '')}</div>
+          <div class="feed-time">${i.time || ''}</div>
+        </div>`;
+      }).join('');
+    }
+
+    div.innerHTML = `
+      <div class="widget-header" title="Glisser pour déplacer">
+        <div class="widget-icon" style="background:${bg};color:${color}">${icon}</div>
+        <div class="widget-title">${this.escape(w.title)}</div>
+        ${count ? `<div class="widget-meta">${count} nv</div>` : (isLoading ? '<span class="spinner"></span>' : '')}
+        <div class="widget-actions public-hide">
+          <button class="widget-btn" onclick="event.stopPropagation();S.fetchFeed('${w.id}')" title="Actualiser">↻</button>
+          <button class="widget-btn" onclick="event.stopPropagation();S.toggleCollapse('${w.id}')" title="${w.collapsed ? 'Déplier' : 'Replier'}">${w.collapsed ? '▼' : '▲'}</button>
+          <button class="widget-btn" onclick="event.stopPropagation();S.openWidgetMenu('${w.id}','${colId}',event)" title="Options">⋮</button>
+        </div>
+      </div>
+      <div class="widget-body">${body}</div>`;
+    return div;
+  },
+
+  updateWidget(wid) {
+    const old = document.querySelector(`.widget[data-wid="${wid}"]`);
+    if (!old) return;
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    let colId = null;
+    for (const cols of Object.values(this.state.columns)) {
+      for (const c of cols) if (c.widgets.includes(wid)) { colId = c.id; break; }
+      if (colId) break;
+    }
+    old.replaceWith(this.buildWidget(w, colId));
+  },
+
+  // ===================================================================
+  //  INTERACTIONS
+  // ===================================================================
+
+  switchTab(id) {
+    this.state.activeTab = id;
+    this.state.searchQ = '';
+    document.getElementById('search-input').value = '';
+    this.librarySelected.clear();
+    this.render();
+    this.saveState();
+  },
+
+  setLayout(lc) {
+    this.state.layouts[this.state.activeTab] = lc;
+    this.renderToolbar();
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  setFilter(f) {
+    this.state.filter = f;
+    this.renderToolbar();
+    this.renderCanvas();
+  },
+
+  setView(v) {
+    this.state.view = v;
+    this.librarySelected.clear();
+    this.renderToolbar();
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  search(q) {
+    this.state.searchQ = q.toLowerCase().trim();
+    this.renderCanvas();
+  },
+
+  toggleCollapse(wid) {
+    const w = this.state.widgets[wid];
+    if (w) { w.collapsed = !w.collapsed; this.updateWidget(wid); this.saveState(); }
+  },
+
+  markRead(id) {
+    if (!this.state.readIds.includes(id)) this.state.readIds.push(id);
+    Object.values(this.state.widgets).forEach(w => {
+      if (w.items) { const i = w.items.find(x => x.id === id); if (i) i.unread = false; }
+    });
+  },
+
+  // ===================================================================
+  //  BATCH SELECTION
+  // ===================================================================
+
+  toggleSelection(id) {
+    if (this.librarySelected.has(id)) this.librarySelected.delete(id);
+    else this.librarySelected.add(id);
+    this.renderCanvas();
+  },
+
+  batchClear() {
+    this.librarySelected.clear();
+    this.renderCanvas();
+  },
+
+  batchAction(action) {
+    if (this.librarySelected.size === 0) return;
+    const ids = Array.from(this.librarySelected);
+    if (action === 'read') {
+      ids.forEach(id => this.markRead(id));
+      this.toast(ids.length + ' article(s) marqué(s) lu(s)');
+    } else if (action === 'pin') {
+      ids.forEach(id => {
+        if (!this.state.saved.includes(id)) this.state.saved.push(id);
+        this.archiveArticle(id);
+      });
+      this.toast(ids.length + ' article(s) épinglé(s)');
+    } else if (action === 'later') {
+      ids.forEach(id => {
+        if (!this.state.later.includes(id)) this.state.later.push(id);
+        this.archiveArticle(id);
+      });
+      this.toast(ids.length + ' ajouté(s) à "À lire plus tard"');
+    } else if (action === 'tag') {
+      this.openBatchTagModal(ids);
+      return;
+    }
+    this.librarySelected.clear();
+    this.render();
+    this.saveState();
+  },
+
+  openBatchTagModal(ids) {
+    const existingTags = this.state.tags || [];
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Taguer ${ids.length} article(s)</h3>
+      <div class="form-row"><label>Tag (séparés par virgule)</label><input id="batch-tag-input" type="text" placeholder="urgent, réforme, dossier-X"></div>
+      ${existingTags.length ? `<div class="form-row"><label>Tags existants</label><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">${existingTags.map(t => `<span class="tag-chip" style="cursor:pointer" onclick="S.appendTag('${this.escape(t)}')">${this.escape(t)}</span>`).join('')}</div></div>` : ''}
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick='S.doBatchTag(${JSON.stringify(ids)})'>Appliquer</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  appendTag(tag) {
+    const input = document.getElementById('batch-tag-input');
+    if (!input) return;
+    const cur = input.value.trim();
+    input.value = cur ? cur + ', ' + tag : tag;
+    input.focus();
+  },
+
+  doBatchTag(ids) {
+    const input = document.getElementById('batch-tag-input');
+    if (!input) return;
+    const tags = input.value.split(',').map(t => t.trim()).filter(Boolean);
+    if (!tags.length) { this.closeModal(); return; }
+    tags.forEach(t => { if (!this.state.tags.includes(t)) this.state.tags.push(t); });
+    ids.forEach(id => {
+      this.archiveArticle(id);
+      const entry = this.state.library[id];
+      if (entry) {
+        entry.tags = entry.tags || [];
+        tags.forEach(t => { if (!entry.tags.includes(t)) entry.tags.push(t); });
+      }
+    });
+    this.librarySelected.clear();
+    this.closeModal();
+    this.render();
+    this.saveState();
+    this.toast(ids.length + ' article(s) tagué(s)');
+  },
+
+  // ===================================================================
+  //  LIBRARY (Bibliothèque)
+  // ===================================================================
+
+  archiveArticle(id) {
+    if (this.state.library[id]) return this.state.library[id];
+    // Trouver l'article
+    let art = null, wt = '';
+    Object.values(this.state.widgets).forEach(w => {
+      if (w.items) { const i = w.items.find(x => x.id === id); if (i) { art = i; wt = w.title; } }
+    });
+    if (!art) return null;
+    this.state.library[id] = {
+      id: id,
+      title: art.title,
+      link: art.link,
+      src: art.src || wt,
+      pubDate: art.pubDate,
+      summary: art.summary || '',
+      savedAt: new Date().toISOString(),
+      note: '',
+      tags: []
+    };
+    return this.state.library[id];
+  },
+
+  openLibrary() {
+    document.getElementById('library').classList.add('on');
+    this.libraryFilter = 'all';
+    this.libraryTagFilter = null;
+    this.librarySearchQ = '';
+    this.renderLibrary();
+  },
+
+  closeLibrary() {
+    document.getElementById('library').classList.remove('on');
+  },
+
+  renderLibrary() {
+    this.renderLibrarySidebar();
+    this.renderLibraryContent();
+  },
+
+  renderLibrarySidebar() {
+    const sidebar = document.getElementById('library-sidebar');
+    const lib = this.state.library || {};
+    const allCount = Object.keys(lib).length;
+    const pinnedCount = this.state.saved.length;
+    const laterCount = this.state.later.length;
+    const historyCount = (this.state.history || []).length;
+
+    // Compter tags
+    const tagCounts = {};
+    Object.values(lib).forEach(a => (a.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+    const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+
+    sidebar.innerHTML = `
+      <div class="library-sidebar-section">
+        <div class="library-sidebar-title">Vues</div>
+        <div class="lib-nav-item ${this.libraryFilter === 'all' && !this.libraryTagFilter ? 'active' : ''}" onclick="S.libSetFilter('all')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+          Tout
+          <span class="lib-nav-count">${allCount}</span>
+        </div>
+        <div class="lib-nav-item ${this.libraryFilter === 'pinned' ? 'active' : ''}" onclick="S.libSetFilter('pinned')">
+          <span style="color:var(--pinned)">★</span>
+          Épinglés
+          <span class="lib-nav-count">${pinnedCount}</span>
+        </div>
+        <div class="lib-nav-item ${this.libraryFilter === 'later' ? 'active' : ''}" onclick="S.libSetFilter('later')">
+          <span>⏱</span>
+          À lire plus tard
+          <span class="lib-nav-count">${laterCount}</span>
+        </div>
+        <div class="lib-nav-item ${this.libraryFilter === 'history' ? 'active' : ''}" onclick="S.libSetFilter('history')">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Historique
+          <span class="lib-nav-count">${historyCount}</span>
+        </div>
+      </div>
+      <div class="library-sidebar-section">
+        <div class="library-sidebar-title">Tags</div>
+        ${sortedTags.length === 0 ? '<div style="padding:10px;font-size:var(--font-xs);color:var(--text-tertiary)">Aucun tag encore</div>' :
+          sortedTags.map(([t, n]) => `
+            <div class="lib-nav-item ${this.libraryTagFilter === t ? 'active' : ''}" onclick="S.libSetTag('${this.escape(t)}')">
+              <span>#</span>
+              ${this.escape(t)}
+              <span class="lib-nav-count">${n}</span>
+            </div>`).join('')}
+      </div>`;
+  },
+
+  libSetFilter(f) {
+    this.libraryFilter = f;
+    this.libraryTagFilter = null;
+    this.renderLibrary();
+  },
+
+  libSetTag(t) {
+    this.libraryFilter = 'tag';
+    this.libraryTagFilter = t;
+    this.renderLibrary();
+  },
+
+  libSearch(q) {
+    this.librarySearchQ = q.toLowerCase().trim();
+    this.renderLibraryContent();
+  },
+
+  renderLibraryContent() {
+    const content = document.getElementById('library-content');
+    const lib = this.state.library || {};
+    let items = [];
+
+    if (this.libraryFilter === 'history') {
+      items = (this.state.history || []).slice().reverse().map(h => ({
+        ...h,
+        savedAt: h.readAt,
+        _isHistory: true
+      }));
+    } else {
+      items = Object.values(lib);
+      if (this.libraryFilter === 'pinned') items = items.filter(a => this.state.saved.includes(a.id));
+      else if (this.libraryFilter === 'later') items = items.filter(a => this.state.later.includes(a.id));
+      else if (this.libraryFilter === 'tag' && this.libraryTagFilter) items = items.filter(a => (a.tags || []).includes(this.libraryTagFilter));
+      items.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+    }
+
+    if (this.librarySearchQ) {
+      items = items.filter(a => (a.title || '').toLowerCase().includes(this.librarySearchQ) || (a.note || '').toLowerCase().includes(this.librarySearchQ));
+    }
+
+    let title = 'Tout';
+    if (this.libraryFilter === 'pinned') title = 'Épinglés';
+    else if (this.libraryFilter === 'later') title = 'À lire plus tard';
+    else if (this.libraryFilter === 'history') title = 'Historique de lecture';
+    else if (this.libraryFilter === 'tag') title = '#' + this.libraryTagFilter;
+
+    content.innerHTML = `
+      <div class="library-content-header">
+        <div class="library-content-title">${title}</div>
+        <span class="library-count">${items.length} article(s)</span>
+        <div class="lib-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Rechercher…" value="${this.escape(this.librarySearchQ)}" oninput="S.libSearch(this.value)">
+        </div>
+      </div>
+      ${items.length === 0 ? `
+        <div class="lib-empty">
+          <div class="lib-empty-icon">📚</div>
+          <h4>Rien à afficher ici</h4>
+          <p>Épingle des articles, ajoute-les à "À lire plus tard", ou tague-les pour les retrouver ici.</p>
+        </div>` :
+        `<div class="lib-article-list">${items.map(a => this.buildLibArticle(a)).join('')}</div>`
+      }`;
+  },
+
+  buildLibArticle(a) {
+    const date = a.savedAt ? new Date(a.savedAt).toLocaleDateString('fr-FR', {day:'numeric',month:'short',year:'numeric'}) : '';
+    const pubDate = a.pubDate ? this.formatTime(a.pubDate) : '';
+    const label = a._isHistory ? 'Lu le' : 'Sauvé le';
+    return `<div class="lib-article" onclick="S.openLibArticle('${a.id}')">
+      <div class="lib-article-head">
+        <span>${this.escape(a.src || '')}</span>
+        ${pubDate ? `<span>· ${pubDate}</span>` : ''}
+        <span style="margin-left:auto">${label} ${date}</span>
+      </div>
+      <div class="lib-article-title">${this.escape(a.title || '')}</div>
+      ${a.note ? `<div class="lib-article-note">${this.escape(a.note)}</div>` : ''}
+      ${a.tags && a.tags.length ? `<div class="lib-article-tags">${a.tags.map(t => `<span class="tag-chip">#${this.escape(t)}</span>`).join('')}</div>` : ''}
+    </div>`;
+  },
+
+  openLibArticle(id) {
+    // Ouvrir depuis la bibliothèque
+    const a = this.state.library[id] || (this.state.history || []).find(h => h.id === id);
+    if (!a) return;
+    // Fermer library, ouvrir reader avec ces données
+    this.closeLibrary();
+    this.curArt = { ...a, wt: a.src };
+    document.getElementById('reader-source').textContent = a.src || '';
+    document.getElementById('reader-title').textContent = a.title || '';
+    document.getElementById('reader-meta').innerHTML =
+      `<span>${a.pubDate ? this.formatTime(a.pubDate) : ''}</span>` +
+      (a.savedAt ? `<span>Sauvé le ${new Date(a.savedAt).toLocaleDateString('fr-FR')}</span>` : '');
+    document.getElementById('reader-content').innerHTML = a.summary ? `<p>${this.escape(a.summary)}</p>` : '<p style="color:var(--text-tertiary)"><em>Article de la bibliothèque</em></p>';
+    document.getElementById('reader-actions').innerHTML =
+      (a.link ? `<a class="btn-primary" href="${this.escape(a.link)}" target="_blank" rel="noopener" style="text-decoration:none">Lire l'article →</a>` : '') +
+      (IS_PUBLIC ? '' : `<button class="btn-ghost" onclick="S.unarchiveArticle('${id}')">Retirer de la bibliothèque</button>`);
+    this.renderReaderAnnotation();
+    document.getElementById('reader').classList.add('on');
+  },
+
+  unarchiveArticle(id) {
+    if (!confirm('Retirer cet article de la bibliothèque ?')) return;
+    delete this.state.library[id];
+    this.state.saved = this.state.saved.filter(x => x !== id);
+    this.state.later = this.state.later.filter(x => x !== id);
+    this.closeReader();
+    this.saveState();
+    this.render();
+    this.toast('Retiré de la bibliothèque');
+  },
+
+  // ===================================================================
+  //  ARTICLE READER
+  // ===================================================================
+
+  openArticle(id) {
+    let art = null, wt = '';
+    Object.values(this.state.widgets).forEach(w => {
+      if (w.items) { const i = w.items.find(x => x.id === id); if (i) { art = i; wt = w.title; } }
+    });
+    if (!art) return;
+    this.curArt = { ...art, wt };
+    this.markRead(id);
+
+    // Ajouter à l'historique (rétention illimitée)
+    if (!this.state.history) this.state.history = [];
+    if (!this.state.history.find(h => h.id === id)) {
+      this.state.history.push({
+        id, title: art.title, src: art.src || wt, link: art.link,
+        pubDate: art.pubDate, summary: art.summary, readAt: new Date().toISOString()
+      });
+    }
+
+    document.getElementById('reader-source').textContent = (art.src || wt);
+    document.getElementById('reader-title').textContent = (art.title || '');
+    document.getElementById('reader-meta').innerHTML = `<span>${art.time || ''}</span><span>${this.escape(wt)}</span>${art.alert ? '<span class="badge badge-alert">alerte</span>' : ''}`;
+    document.getElementById('reader-content').innerHTML = art.summary ?
+      `<p>${this.escape(art.summary)}</p>` :
+      '<p style="color:var(--text-tertiary)"><em>Pas d\'extrait. Clique sur "Lire l\'article" pour voir le contenu complet.</em></p>';
+
+    const isPinned = this.state.saved.includes(id);
+    const isLater = this.state.later.includes(id);
+    document.getElementById('pin-btn').textContent = isPinned ? '★ Désépingler' : '☆ Épingler';
+    document.getElementById('later-btn').textContent = isLater ? '⏱ Retirer' : '⏱ Plus tard';
+    document.getElementById('reader-actions').innerHTML =
+      (art.link ? `<a class="btn-primary" href="${this.escape(art.link)}" target="_blank" rel="noopener" style="text-decoration:none">Lire l'article →</a>` : '') +
+      `<button class="btn-ghost" onclick="S.shareArticle()">Copier le lien</button>` +
+      (IS_PUBLIC ? '' : `<button class="btn-ghost" onclick="S.tagCurrentArticle()">Taguer</button>`);
+    this.renderReaderAnnotation();
+    document.getElementById('reader').classList.add('on');
+    this.renderTabs();
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  renderReaderAnnotation() {
+    const el = document.getElementById('reader-annotation');
+    if (!el || !this.curArt || IS_PUBLIC) { if (el) el.innerHTML = ''; return; }
+    const id = this.curArt.id;
+    const entry = this.state.library[id];
+    const note = entry ? entry.note || '' : '';
+    const tags = entry ? entry.tags || [] : [];
+    el.innerHTML = `
+      <div class="reader-note">
+        <div class="reader-note-label">Note personnelle</div>
+        <textarea id="art-note" placeholder="Ajoute une note libre à cet article…" oninput="S.updateNote()">${this.escape(note)}</textarea>
+      </div>
+      ${tags.length ? `<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:4px">${tags.map(t => `<span class="tag-chip">#${this.escape(t)}<span class="rm" onclick="S.removeTag('${this.escape(t)}')">×</span></span>`).join('')}</div>` : ''}
+    `;
+  },
+
+  updateNote() {
+    if (!this.curArt) return;
+    const id = this.curArt.id;
+    const note = document.getElementById('art-note').value;
+    // Archiver si nécessaire
+    if (note.trim() && !this.state.library[id]) this.archiveArticle(id);
+    if (this.state.library[id]) {
+      this.state.library[id].note = note;
+      this.saveState();
+    }
+  },
+
+  tagCurrentArticle() {
+    if (!this.curArt) return;
+    this.openBatchTagModal([this.curArt.id]);
+  },
+
+  removeTag(t) {
+    if (!this.curArt) return;
+    const id = this.curArt.id;
+    const entry = this.state.library[id];
+    if (entry && entry.tags) {
+      entry.tags = entry.tags.filter(x => x !== t);
+      this.renderReaderAnnotation();
+      this.saveState();
+    }
+  },
+
+  closeReader() { document.getElementById('reader').classList.remove('on'); },
+
+  pinCurrentArticle() {
+    if (!this.curArt) return;
+    const id = this.curArt.id;
+    if (this.state.saved.includes(id)) {
+      this.state.saved = this.state.saved.filter(x => x !== id);
+      this.toast('Désépinglé');
+    } else {
+      this.state.saved.push(id);
+      this.archiveArticle(id);
+      this.toast('Article épinglé');
+    }
+    document.getElementById('pin-btn').textContent = this.state.saved.includes(id) ? '★ Désépingler' : '☆ Épingler';
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  laterCurrentArticle() {
+    if (!this.curArt) return;
+    const id = this.curArt.id;
+    if (this.state.later.includes(id)) {
+      this.state.later = this.state.later.filter(x => x !== id);
+      this.toast('Retiré de "À lire plus tard"');
+    } else {
+      this.state.later.push(id);
+      this.archiveArticle(id);
+      this.toast('Ajouté à "À lire plus tard"');
+    }
+    document.getElementById('later-btn').textContent = this.state.later.includes(id) ? '⏱ Retirer' : '⏱ Plus tard';
+    this.renderCanvas();
+    this.saveState();
+  },
+
+  shareArticle() {
+    if (!this.curArt || !this.curArt.link) return;
+    navigator.clipboard.writeText(this.curArt.link)
+      .then(() => this.toast('Lien copié'))
+      .catch(() => this.toast('Copie impossible'));
+  },
+
+  // ===================================================================
+  //  DRAG & DROP
+  // ===================================================================
+
+  dropOnCol(colId) {
+    if (!this.dragWidget) return;
+    const srcTab = this.dragFromTab || this.state.activeTab;
+    const srcCols = this.state.columns[srcTab] || [];
+    const sc = srcCols.find(c => c.id === this.dragFromCol);
+    if (sc) sc.widgets = sc.widgets.filter(w => w !== this.dragWidget);
+    const destCols = this.state.columns[this.state.activeTab] || [];
+    const dc = destCols.find(c => c.id === colId);
+    if (dc && !dc.widgets.includes(this.dragWidget)) dc.widgets.push(this.dragWidget);
+    this.dragWidget = this.dragFromCol = this.dragFromTab = null;
+    this.render();
+    this.saveState();
+    this.toast('Widget déplacé');
+  },
+
+  tabDragStart(e, tid) {
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab || tab.pinned) { e.preventDefault(); return; }
+    this.dragTabId = tid;
+    e.dataTransfer.effectAllowed = 'move';
+    e.stopPropagation();
+  },
+
+  tabDragEnd() {
+    this.dragTabId = null;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('reorder-drop-before', 'reorder-drop-after', 'drag-over'));
+  },
+
+  tabDragOver(e, tid) {
+    e.preventDefault();
+    if (this.dragTabId) {
+      const el = document.querySelector(`.tab[data-tid="${tid}"]`);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const before = e.clientX < rect.left + rect.width / 2;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('reorder-drop-before', 'reorder-drop-after'));
+      el.classList.add(before ? 'reorder-drop-before' : 'reorder-drop-after');
+      return;
+    }
+    if (this.dragWidget) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+      const el = document.querySelector(`.tab[data-tid="${tid}"]`);
+      if (el) el.classList.add('drag-over');
+    }
+  },
+
+  tabDragLeave(tid) {
+    const el = document.querySelector(`.tab[data-tid="${tid}"]`);
+    if (el) el.classList.remove('drag-over', 'reorder-drop-before', 'reorder-drop-after');
+  },
+
+  tabDrop(e, tid) {
+    e.preventDefault();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over', 'reorder-drop-before', 'reorder-drop-after'));
+    if (this.dragTabId && this.dragTabId !== tid) {
+      const targetEl = document.querySelector(`.tab[data-tid="${tid}"]`);
+      const before = targetEl ? e.clientX < targetEl.getBoundingClientRect().left + targetEl.getBoundingClientRect().width / 2 : false;
+      this.reorderTab(this.dragTabId, tid, before);
+      this.dragTabId = null;
+      return;
+    }
+    if (!this.dragWidget || tid === this.dragFromTab) return;
+    const srcCols = this.state.columns[this.dragFromTab] || [];
+    const sc = srcCols.find(c => c.id === this.dragFromCol);
+    if (sc) sc.widgets = sc.widgets.filter(w => w !== this.dragWidget);
+    const destCols = this.state.columns[tid] || [];
+    if (!destCols.length) destCols.push({ id: mkId(), widgets: [] });
+    destCols[0].widgets.push(this.dragWidget);
+    this.dragWidget = this.dragFromCol = this.dragFromTab = null;
+    this.render();
+    this.saveState();
+    this.toast('Widget déplacé vers l\'onglet');
+  },
+
+  reorderTab(srcId, destId, before) {
+    const srcTab = this.state.tabs.find(t => t.id === srcId);
+    const destTab = this.state.tabs.find(t => t.id === destId);
+    if (!srcTab || !destTab || srcTab.pinned) return;
+    if (destTab.pinned && before) return;
+    this.state.tabs = this.state.tabs.filter(t => t.id !== srcId);
+    const destIdx = this.state.tabs.findIndex(t => t.id === destId);
+    this.state.tabs.splice(before ? destIdx : destIdx + 1, 0, srcTab);
+    this.render();
+    this.saveState();
+  },
+
+  toggleTabPin(tid) {
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    tab.pinned = !tab.pinned;
+    this.closeCtx();
+    this.render();
+    this.saveState();
+    this.toast(tab.pinned ? 'Onglet épinglé' : 'Onglet désépinglé');
+  },
+
+  // ===================================================================
+  //  CONTEXT MENUS
+  // ===================================================================
+
+  openWidgetMenu(wid, colId, e) {
+    e.stopPropagation();
+    const ctx = document.getElementById('ctx-menu');
+    ctx.style.display = 'block';
+    ctx.style.left = Math.min(e.clientX, window.innerWidth - 210) + 'px';
+    ctx.style.top = Math.min(e.clientY, window.innerHeight - 200) + 'px';
+    ctx.innerHTML = `
+      <div class="ctx-item" onclick="S.fetchFeed('${wid}');S.closeCtx()">↻ Actualiser</div>
+      <div class="ctx-item" onclick="S.markWidgetAllRead('${wid}')">✓ Tout marquer lu</div>
+      <div class="ctx-item" onclick="S.editWidget('${wid}')">✎ Modifier…</div>
+      <div class="ctx-item" onclick="S.moveWidgetToTab('${wid}','${colId}')">→ Déplacer vers…</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item danger" onclick="S.removeWidget('${wid}','${colId}')">🗑 Supprimer</div>`;
+  },
+
+  openTabMenu(tid, e) {
+    e.stopPropagation();
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    const ctx = document.getElementById('ctx-menu');
+    ctx.style.display = 'block';
+    ctx.style.left = Math.min(e.clientX, window.innerWidth - 210) + 'px';
+    ctx.style.top = (e.clientY + 8) + 'px';
+    ctx.innerHTML = `
+      <div class="ctx-item" onclick="S.toggleTabPin('${tid}')">${tab.pinned ? '☆ Désépingler' : '★ Épingler'}</div>
+      <div class="ctx-item" onclick="S.renameTab('${tid}')">✎ Renommer…</div>
+      <div class="ctx-item" onclick="S.recolorTab('${tid}')">🎨 Couleur…</div>
+      <div class="ctx-item" onclick="S.duplicateTab('${tid}')">⧉ Dupliquer</div>
+      <div class="ctx-sep"></div>
+      <div class="ctx-item danger" onclick="S.deleteTab('${tid}')">🗑 Supprimer</div>`;
+  },
+
+  closeCtx() { document.getElementById('ctx-menu').style.display = 'none'; },
+
+  markWidgetAllRead(wid) {
+    const w = this.state.widgets[wid];
+    if (w && w.items) w.items.forEach(i => {
+      i.unread = false;
+      if (!this.state.readIds.includes(i.id)) this.state.readIds.push(i.id);
+    });
+    this.closeCtx();
+    this.render();
+    this.saveState();
+    this.toast('Tous marqués lus');
+  },
+
+  editWidget(wid) {
+    this.closeCtx();
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Modifier le widget</h3>
+      <div class="form-row"><label>Titre</label><input id="ew-title" type="text" value="${this.escape(w.title)}"></div>
+      <div class="form-row"><label>URL du flux</label><input id="ew-url" type="url" value="${this.escape(w.url || '')}"></div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick="S.doEditWidget('${wid}')">Enregistrer</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  doEditWidget(wid) {
+    const w = this.state.widgets[wid];
+    if (!w) return;
+    w.title = document.getElementById('ew-title').value.trim() || w.title;
+    const newUrl = document.getElementById('ew-url').value.trim();
+    const urlChanged = newUrl !== w.url;
+    w.url = newUrl;
+    this.closeModal();
+    this.render();
+    if (urlChanged) this.fetchFeed(wid);
+    this.saveState();
+  },
+
+  moveWidgetToTab(wid, colId) {
+    this.closeCtx();
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Déplacer vers un onglet</h3>
+      <div class="form-row"><label>Onglet destination</label>
+      <select id="mv-tab">${this.state.tabs.filter(t => t.id !== this.state.activeTab).map(t => `<option value="${t.id}">${this.escape(t.label)}</option>`).join('')}</select></div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick="S.doMoveWidget('${wid}','${colId}')">Déplacer</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  doMoveWidget(wid, colId) {
+    const dest = document.getElementById('mv-tab').value;
+    const srcCols = this.state.columns[this.state.activeTab] || [];
+    const sc = srcCols.find(c => c.id === colId);
+    if (sc) sc.widgets = sc.widgets.filter(w => w !== wid);
+    const destCols = this.state.columns[dest] || [];
+    if (!destCols.length) destCols.push({ id: mkId(), widgets: [] });
+    destCols[0].widgets.push(wid);
+    this.closeModal();
+    this.render();
+    this.saveState();
+    this.toast('Widget déplacé');
+  },
+
+  removeWidget(wid, colId) {
+    Object.values(this.state.columns).forEach(cols => cols.forEach(c => {
+      c.widgets = c.widgets.filter(w => w !== wid);
+    }));
+    delete this.state.widgets[wid];
+    this.closeCtx();
+    this.render();
+    this.saveState();
+    this.toast('Widget supprimé');
+  },
+
+  renameTab(tid) {
+    this.closeCtx();
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Renommer l'onglet</h3>
+      <div class="form-row"><label>Nouveau nom</label><input id="rn-name" type="text" value="${this.escape(tab.label)}"></div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick="S.doRenameTab('${tid}')">OK</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+    setTimeout(() => { const i = document.getElementById('rn-name'); if (i) i.select(); }, 50);
+  },
+
+  doRenameTab(tid) {
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (tab) tab.label = document.getElementById('rn-name').value.trim() || tab.label;
+    this.closeModal();
+    this.render();
+    this.saveState();
+  },
+
+  recolorTab(tid) {
+    this.closeCtx();
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    const palette = ['#2563eb', '#059669', '#b45309', '#dc2626', '#7c3aed', '#0891b2', '#d97706', '#65a30d', '#db2777', '#4b5563'];
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Couleur de l'onglet</h3>
+      <div class="form-row"><label>Choisir une couleur</label>
+        <input type="color" id="rc-color" value="${tab.color}">
+      </div>
+      <div class="form-row">
+        <label>Suggestions</label>
+        <div class="color-suggestions">
+          ${palette.map(c => `<button type="button" class="color-swatch" style="background:${c}" onclick="document.getElementById('rc-color').value='${c}'"></button>`).join('')}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick="S.doRecolorTab('${tid}')">OK</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  doRecolorTab(tid) {
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (tab) tab.color = document.getElementById('rc-color').value;
+    this.closeModal();
+    this.render();
+    this.saveState();
+  },
+
+  duplicateTab(tid) {
+    this.closeCtx();
+    const tab = this.state.tabs.find(t => t.id === tid);
+    if (!tab) return;
+    const nid = mkId();
+    this.state.tabs.push({ ...tab, id: nid, label: tab.label + ' (copie)', pinned: false });
+    const srcCols = this.state.columns[tid] || [];
+    const map = {};
+    srcCols.forEach(c => c.widgets.forEach(wid => {
+      const w = this.state.widgets[wid];
+      if (w) { const nw = mkId(); this.state.widgets[nw] = { ...JSON.parse(JSON.stringify(w)), id: nw }; map[wid] = nw; }
+    }));
+    this.state.columns[nid] = srcCols.map(c => ({ id: mkId(), widgets: c.widgets.map(wid => map[wid]).filter(Boolean) }));
+    this.state.layouts[nid] = this.state.layouts[tid] || '3';
+    this.render();
+    this.saveState();
+    this.toast('Onglet dupliqué');
+  },
+
+  deleteTab(tid) {
+    this.closeCtx();
+    if (this.state.tabs.length <= 1) { this.toast('Impossible de supprimer le dernier onglet'); return; }
+    if (!confirm('Supprimer cet onglet et tous ses widgets ?')) return;
+    const cols = this.state.columns[tid] || [];
+    cols.forEach(c => c.widgets.forEach(wid => delete this.state.widgets[wid]));
+    this.state.tabs = this.state.tabs.filter(t => t.id !== tid);
+    delete this.state.columns[tid];
+    delete this.state.layouts[tid];
+    if (this.state.activeTab === tid) this.state.activeTab = this.state.tabs[0].id;
+    this.render();
+    this.saveState();
+    this.toast('Onglet supprimé');
+  },
+
+  // ===================================================================
+  //  ADD WIDGET / TAB
+  // ===================================================================
+
+  openAddWidget() {
+    const cols = this.state.columns[this.state.activeTab] || [];
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Ajouter un flux</h3>
+      <div class="form-row"><label>Titre</label><input id="wt-title" type="text" placeholder="Ex: Le Monde — Tech"></div>
+      <div class="form-row"><label>URL du flux RSS / Atom</label><input id="wt-url" type="url" placeholder="https://…/feed.xml"></div>
+      <div class="form-row"><label>Onglet</label><select id="wt-tab">${this.state.tabs.map(t => `<option value="${t.id}"${t.id === this.state.activeTab ? ' selected' : ''}>${this.escape(t.label)}</option>`).join('')}</select></div>
+      <div class="form-row"><label>Colonne</label><select id="wt-col">${cols.map((c, i) => `<option value="${c.id}">Colonne ${i + 1}</option>`).join('')}</select></div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick="S.doAddWidget()">Ajouter</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+    setTimeout(() => { const i = document.getElementById('wt-title'); if (i) i.focus(); }, 50);
+  },
+
+  doAddWidget() {
+    const title = document.getElementById('wt-title').value.trim() || 'Nouveau flux';
+    const url = document.getElementById('wt-url').value.trim();
+    const tab = document.getElementById('wt-tab').value;
+    const colId = document.getElementById('wt-col').value;
+    if (!url) { this.toast('URL manquante'); return; }
+    const id = mkId();
+    this.state.widgets[id] = { id, type: 'rss', title, source: 'rss', collapsed: false, url, items: [] };
+    const col = (this.state.columns[tab] || []).find(c => c.id === colId);
+    if (col) col.widgets.push(id);
+    this.closeModal();
+    this.render();
+    this.saveState();
+    this.fetchFeed(id);
+    this.toast('Flux ajouté');
+  },
+
+  openAddTab() {
+    const palette = ['#2563eb', '#059669', '#b45309', '#dc2626', '#7c3aed', '#0891b2', '#d97706', '#65a30d', '#db2777', '#4b5563'];
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Nouvel onglet</h3>
+      <div class="form-row"><label>Nom</label><input id="tab-name" type="text" placeholder="Ex: Cybersécurité"></div>
+      <div class="form-row"><label>Couleur</label>
+        <input type="color" id="tab-color" value="#2563eb">
+        <div class="color-suggestions">
+          ${palette.map(c => `<button type="button" class="color-swatch" style="background:${c}" onclick="document.getElementById('tab-color').value='${c}'"></button>`).join('')}
+        </div>
+      </div>
+      <div class="form-row"><label>Colonnes par défaut</label>
+        <select id="tab-lc"><option value="2">2 colonnes</option><option value="3" selected>3 colonnes</option><option value="4">4 colonnes</option></select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Annuler</button>
+        <button class="btn-primary" onclick="S.doAddTab()">Créer</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+    setTimeout(() => { const i = document.getElementById('tab-name'); if (i) i.focus(); }, 50);
+  },
+
+  doAddTab() {
+    const label = document.getElementById('tab-name').value.trim() || 'Nouveau';
+    const color = document.getElementById('tab-color').value;
+    const lc = document.getElementById('tab-lc').value;
+    const id = mkId();
+    this.state.tabs.push({ id, label, color });
+    this.state.layouts[id] = lc;
+    const n = parseInt(lc);
+    this.state.columns[id] = [];
+    for (let i = 0; i < n; i++) this.state.columns[id].push({ id: mkId(), widgets: [] });
+    this.closeModal();
+    this.switchTab(id);
+    this.toast('Onglet créé');
+  },
+
+  // ===================================================================
+  //  DASHBOARD (statistiques)
+  // ===================================================================
+
+  openDashboard() {
+    const all = Object.values(this.state.widgets).flatMap(w => w.items || []);
+    const unread = all.filter(i => i.unread).length;
+    const alerts = all.filter(i => i.alert).length;
+    const saved = this.state.saved.length;
+    const later = this.state.later.length;
+    const library = Object.keys(this.state.library || {}).length;
+
+    const tabStats = this.state.tabs.map(t => {
+      const cols = this.state.columns[t.id] || [];
+      let widgets = 0, articles = 0, un = 0;
+      cols.forEach(c => c.widgets.forEach(wid => {
+        const w = this.state.widgets[wid];
+        if (w) { widgets++; if (w.items) { articles += w.items.length; un += w.items.filter(i => i.unread).length; } }
+      }));
+      return { label: t.label, color: t.color, widgets, articles, unread: un };
+    });
+
+    const kwCounts = {};
+    this.state.keywords.forEach(k => kwCounts[k] = 0);
+    all.forEach(i => {
+      const t = (i.title || '').toLowerCase();
+      this.state.keywords.forEach(k => { if (t.includes(k.toLowerCase())) kwCounts[k]++; });
+    });
+    const topKw = Object.entries(kwCounts).sort((a, b) => b[1] - a[1]).slice(0, 5).filter(([, n]) => n > 0);
+
+    const statCard = (num, lbl, color) => `
+      <div style="background:var(--bg-subtle);padding:14px;border-radius:var(--radius-md)">
+        <div style="font-size:22px;font-weight:700;color:${color || 'var(--text)'};letter-spacing:-0.02em">${num}</div>
+        <div style="font-size:var(--font-2xs);color:var(--text-tertiary);font-weight:500;margin-top:2px;text-transform:uppercase;letter-spacing:0.05em">${lbl}</div>
+      </div>`;
+
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Tableau de bord</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${statCard(all.length, 'Articles')}
+        ${statCard(unread, 'Non lus', 'var(--accent)')}
+        ${statCard(alerts, 'Alertes', 'var(--danger)')}
+        ${statCard(saved, 'Épinglés', 'var(--pinned)')}
+        ${statCard(later, 'À lire plus tard', 'var(--warning)')}
+        ${statCard(library, 'En bibliothèque', 'var(--success)')}
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Par onglet</div>
+        ${tabStats.map(s => `
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:var(--font-sm)">
+            <div style="width:8px;height:8px;border-radius:50%;background:${s.color}"></div>
+            <div style="flex:1;font-weight:500">${this.escape(s.label)}</div>
+            <div style="color:var(--text-tertiary);font-size:var(--font-xs)">${s.widgets} flux · ${s.articles} art.</div>
+            <div style="min-width:36px;text-align:right;font-weight:600;color:${s.unread > 0 ? 'var(--accent)' : 'var(--text-tertiary)'}">${s.unread}</div>
+          </div>`).join('')}
+      </div>
+      ${topKw.length ? `
+      <div class="modal-section">
+        <div class="modal-section-title">Mots-clés présents</div>
+        ${topKw.map(([k, n]) => `
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:var(--font-sm)">
+            <div style="flex:1">${this.escape(k)}</div>
+            <div style="color:var(--text-tertiary)">${n} article(s)</div>
+          </div>`).join('')}
+      </div>` : ''}
+      <div class="modal-footer"><button class="btn-primary" onclick="S.closeModal()">Fermer</button></div>`;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  // ===================================================================
+  //  SETTINGS
+  // ===================================================================
+
+  openSettings() {
+    const publicUrl = window.location.origin + window.location.pathname + '?view=public';
+    const curTheme = localStorage.getItem(LS_THEME) || 'auto';
+    const curDensity = localStorage.getItem(LS_DENSITY) || 'normal';
+
+    const seg = (name, options, current, callback) => `
+      <div class="segmented">
+        ${options.map(([v, l]) => `<button type="button" class="segmented-btn${current === v ? ' active' : ''}" onclick="S.${callback}('${v}')">${l}</button>`).join('')}
+      </div>`;
+
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Paramètres</h3>
+
+      <div class="share-card">
+        <div style="font-weight:600;font-size:var(--font-sm);margin-bottom:4px">🔗 Partager en lecture seule</div>
+        <p style="font-size:var(--font-xs);color:var(--text-secondary);margin-bottom:8px">Envoie ce lien pour que d'autres consultent ton dashboard sans pouvoir le modifier.</p>
+        <input id="share-url" type="text" readonly value="${this.escape(publicUrl)}" onclick="this.select()" style="width:100%;padding:6px 9px;font-size:var(--font-xs);border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elevated);color:var(--text);font-family:var(--font-mono)">
+        <button class="btn-ghost" style="margin-top:8px;width:100%" onclick="S.copyShareLink()">Copier le lien</button>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Apparence</div>
+        <div class="form-row"><label>Thème</label>
+          ${seg('theme', [['light', '☀ Clair'], ['dark', '🌙 Sombre'], ['auto', '💻 Auto']], curTheme, 'setTheme')}
+        </div>
+        <div class="form-row"><label>Densité</label>
+          ${seg('density', [['compact', 'Compact'], ['normal', 'Normal'], ['comfortable', 'Confortable']], curDensity, 'setDensity')}
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Backend & alertes</div>
+        <div class="form-row"><label>URL du backend</label><input id="set-url" type="url" value="${this.escape(this.backendUrl || '')}" placeholder="https://…onrender.com"></div>
+        <div class="form-row"><label>Mots-clés d'alerte (un par ligne)</label><textarea id="set-kw">${this.escape(this.state.keywords.join('\n'))}</textarea></div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Import / Export</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-ghost" onclick="S.exportOPML()">Exporter OPML</button>
+          <button class="btn-ghost" onclick="S.importOPMLPrompt()">Importer OPML</button>
+          <button class="btn-ghost" onclick="S.exportJSON()">Export config</button>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <button class="btn-ghost btn-danger" onclick="S.resetAll()">Réinitialiser tout</button>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-ghost" onclick="S.closeModal()">Fermer</button>
+        <button class="btn-primary" onclick="S.saveSettings()">Enregistrer</button>
+      </div>`;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  setTheme(v) {
+    localStorage.setItem(LS_THEME, v);
+    if (v === 'auto') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', v);
+    this.openSettings();
+  },
+
+  setDensity(v) {
+    localStorage.setItem(LS_DENSITY, v);
+    if (v === 'normal') document.documentElement.removeAttribute('data-density');
+    else document.documentElement.setAttribute('data-density', v);
+    this.openSettings();
+  },
+
+  saveSettings() {
+    let url = document.getElementById('set-url').value.trim();
+    if (url.endsWith('/')) url = url.slice(0, -1);
+    if (url !== this.backendUrl) {
+      if (url) localStorage.setItem(LS_BACKEND, url); else localStorage.removeItem(LS_BACKEND);
+      this.backendUrl = url || null;
+      this.checkBackend();
+    }
+    const kw = document.getElementById('set-kw').value.split('\n').map(s => s.trim()).filter(Boolean);
+    this.state.keywords = kw;
+    this.closeModal();
+    this.saveState();
+    this.render();
+    this.toast('Paramètres enregistrés');
+  },
+
+  copyShareLink() {
+    const url = document.getElementById('share-url').value;
+    navigator.clipboard.writeText(url)
+      .then(() => this.toast('Lien copié'))
+      .catch(() => { document.getElementById('share-url').select(); document.execCommand('copy'); this.toast('Lien copié'); });
+  },
+
+  // ===================================================================
+  //  OPML IMPORT / EXPORT
+  // ===================================================================
+
+  exportOPML() {
+    const feeds = Object.values(this.state.widgets).filter(w => w.type === 'rss' && w.url);
+    const opml = `<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head><title>Veille Export</title><dateCreated>${new Date().toISOString()}</dateCreated></head>
+  <body>
+${feeds.map(w => `    <outline text="${this.escape(w.title)}" title="${this.escape(w.title)}" type="rss" xmlUrl="${this.escape(w.url)}"/>`).join('\n')}
+  </body>
+</opml>`;
+    const b = new Blob([opml], { type: 'text/xml' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'veille-export.opml';
+    a.click();
+    this.toast('OPML téléchargé');
+  },
+
+  importOPMLPrompt() {
+    this.closeModal();
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.opml,.xml,text/xml,text/x-opml';
+    input.style.position = 'fixed';
+    input.style.left = '-9999px';
+    document.body.appendChild(input);
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) { document.body.removeChild(input); return; }
+      try {
+        const text = await file.text();
+        this.openOPMLImportChoice(text, file.name);
+      } catch(err) {
+        this.toast('Erreur de lecture');
+      }
+      document.body.removeChild(input);
+    };
+    input.click();
+  },
+
+  openOPMLImportChoice(xml, filename) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'text/xml');
+    if (doc.querySelector('parsererror')) { this.toast('OPML invalide'); return; }
+    const allFlux = doc.querySelectorAll('outline[xmlUrl]');
+    const categories = [];
+    doc.querySelectorAll('body > outline').forEach(o => {
+      if (!o.getAttribute('xmlUrl')) {
+        const children = o.querySelectorAll(':scope > outline[xmlUrl], :scope outline[xmlUrl]');
+        if (children.length > 0) categories.push({
+          name: o.getAttribute('text') || o.getAttribute('title') || 'Sans nom',
+          flux: Array.from(children)
+        });
+      }
+    });
+    if (allFlux.length === 0) { this.toast('Aucun flux trouvé'); return; }
+    if (categories.length === 0) { this.importOPMLFlat(allFlux); return; }
+
+    document.getElementById('modal-body').innerHTML = `
+      <h3>Import OPML</h3>
+      <p style="font-size:var(--font-sm);color:var(--text-secondary);margin-bottom:12px">${this.escape(filename)} — <strong>${allFlux.length} flux</strong> dans <strong>${categories.length} catégorie(s)</strong>.</p>
+      <div style="background:var(--bg-subtle);padding:12px;border-radius:var(--radius-md);cursor:pointer;transition:background 120ms" onclick="S.doImportOPMLHierarchical()" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg-subtle)'">
+        <div style="font-weight:600">📁 Import hiérarchique (recommandé)</div>
+        <div style="font-size:var(--font-xs);color:var(--text-secondary);margin-top:4px">Chaque catégorie devient un nouvel onglet — ${categories.length} onglets créés.</div>
+      </div>
+      <div style="background:var(--bg-subtle);padding:12px;border-radius:var(--radius-md);cursor:pointer;margin-top:8px;transition:background 120ms" onclick="S.doImportOPMLFlat()" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='var(--bg-subtle)'">
+        <div style="font-weight:600">📄 Import plat</div>
+        <div style="font-size:var(--font-xs);color:var(--text-secondary);margin-top:4px">Tous les ${allFlux.length} flux dans l'onglet actif.</div>
+      </div>
+      <div class="modal-footer"><button class="btn-ghost" onclick="S.closeModal()">Annuler</button></div>`;
+    this._opmlCategories = categories;
+    this._opmlAllFlux = allFlux;
+    document.getElementById('overlay').classList.add('on');
+  },
+
+  doImportOPMLHierarchical() {
+    const cats = this._opmlCategories;
+    if (!cats) return;
+    const palette = ['#2563eb', '#059669', '#b45309', '#dc2626', '#7c3aed', '#0891b2', '#d97706', '#65a30d', '#db2777', '#4b5563'];
+    let total = 0;
+    cats.forEach((cat, ci) => {
+      const tid = mkId();
+      this.state.tabs.push({
+        id: tid,
+        label: cat.name.length > 40 ? cat.name.slice(0, 40) + '…' : cat.name,
+        color: palette[ci % palette.length]
+      });
+      this.state.layouts[tid] = cat.flux.length <= 2 ? '2' : cat.flux.length <= 6 ? '3' : '4';
+      const numCols = parseInt(this.state.layouts[tid]);
+      const cols = [];
+      for (let i = 0; i < numCols; i++) cols.push({ id: mkId(), widgets: [] });
+      this.state.columns[tid] = cols;
+      cat.flux.forEach((o, fi) => {
+        const url = o.getAttribute('xmlUrl');
+        const title = o.getAttribute('title') || o.getAttribute('text') || url;
+        if (!url) return;
+        const id = mkId();
+        this.state.widgets[id] = { id, type: 'rss', title, source: 'rss', collapsed: false, url, items: [] };
+        cols[fi % numCols].widgets.push(id);
+        total++;
+        this.fetchFeed(id);
+      });
+    });
+    this._opmlCategories = this._opmlAllFlux = null;
+    this.closeModal();
+    this.saveState();
+    this.render();
+    this.toast(`${cats.length} onglet(s), ${total} flux importés`);
+  },
+
+  doImportOPMLFlat() {
+    const flux = this._opmlAllFlux;
+    if (flux) this.importOPMLFlat(flux);
+    this._opmlCategories = this._opmlAllFlux = null;
+    this.closeModal();
+  },
+
+  importOPMLFlat(outlines) {
+    const cols = this.state.columns[this.state.activeTab] || [];
+    if (!cols.length) { cols.push({ id: mkId(), widgets: [] }); this.state.columns[this.state.activeTab] = cols; }
+    let n = 0;
+    outlines.forEach((o, i) => {
+      const url = o.getAttribute('xmlUrl');
+      const title = o.getAttribute('title') || o.getAttribute('text') || url;
+      if (!url) return;
+      const id = mkId();
+      this.state.widgets[id] = { id, type: 'rss', title, source: 'rss', collapsed: false, url, items: [] };
+      const col = cols[i % cols.length];
+      col.widgets.push(id);
+      n++;
+      this.fetchFeed(id);
+    });
+    this.saveState();
+    this.render();
+    this.toast(n + ' flux importés');
+  },
+
+  exportJSON() {
+    const b = new Blob([JSON.stringify(this.state, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    a.download = 'veille-config.json';
+    a.click();
+    this.toast('Config exportée');
+  },
+
+  resetAll() {
+    if (!confirm('Effacer toute la configuration locale ?')) return;
+    localStorage.removeItem(LS_STATE);
+    location.reload();
+  },
+
+  // ===================================================================
+  //  UTILS
+  // ===================================================================
+
+  closeModal() { document.getElementById('overlay').classList.remove('on'); },
+
+  toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => t.classList.remove('on'), 2500);
+  },
+
+  escape(s) {
+    if (s === undefined || s === null) return '';
+    return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  }
+};
+
+// =====================================================================
+//  GLOBAL EVENT LISTENERS
+// =====================================================================
+
+document.addEventListener('click', e => {
+  const ctx = document.getElementById('ctx-menu');
+  if (ctx && !ctx.contains(e.target)) ctx.style.display = 'none';
+});
+document.getElementById('overlay').addEventListener('click', e => {
+  if (e.target.id === 'overlay') S.closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    S.closeModal();
+    S.closeReader();
+    S.closeLibrary();
+    S.closeCtx();
+  }
+});
+
+S.init();
+</script>
+</body>
+</html>
